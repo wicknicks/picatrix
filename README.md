@@ -11,7 +11,7 @@ through $PATH):
 
 ```node searcher.js```
 
-Go to http://localhost:2900/ to access the index & tester.html.
+Go to [http://localhost:2900/](http://localhost:2900/) to access the index & tester.html.
 
 
 ##JS Server Interface for the Client
