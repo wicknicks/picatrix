@@ -6,8 +6,8 @@ You will need node.js v0.8.4 to run this. Get it from here: nodejs.org/
 
 The required npm dependencies are already in node_modules
 
-Run the server using this command (assuming node binary is accessible
-through $PATH):
+Run the server using this command (assuming the node binary is accessible
+through $PATH, and pwd contains searcher.js):
 
 ```node searcher.js```
 
