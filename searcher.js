@@ -1,6 +1,6 @@
 var 
   reds = require('reds'),
-  search = reds.createSearch('some-name'), 
+  search = reds.createSearch('px-embedded-index'), 
   strs = [];
 
 var fs = require('fs');
