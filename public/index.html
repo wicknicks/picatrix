@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<script type = "text/javascript" src =
+"http://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script type = "text/javascript">
+$(document).ready(function() {
+  var q = new Object();
+  q.query = 'india';
+  var url = "" + document.location;
+  var ix = url.indexOf("?q=");
+  if (ix > 0) {
+    q.query = url.substr(ix+3,url.length); 
+  }
+  $.post('/search', q, function(resp) {
+    var o = JSON.parse(resp);
+    $('#results').append('<strong> Query: ' + 
+        o.query + '</strong><br><br>');
+    o.arr.forEach( function(i) { 
+      $('#list').append("<li>" + i + "</li>"); 
+    });
+    
+  });
+});
+</script>
+</head>
+<body>
+<div id = 'results'>
+  <ol id = 'list'></ol>
+</div>
+</body>
+</html>
