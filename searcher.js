@@ -90,6 +90,10 @@ app.post('/search', function (req, res, next) {
       });
   });
 
+
+/* convert a list of results into an array of hierarchical objects
+   (which specify subevent relationships between parent and child
+   events) */
 function condense(results) {
   results = results.sort();
   var root = []; count=0;
@@ -145,7 +149,8 @@ function rootAdd(root, nm) {
   return event; //return the index
 }
 
-var count = 0;
+
+//load photo content for each event
 function load(event, path) {
   if (!event.photos) event.photos = [];
   for (var i=0; i<photos.length; i++) {
@@ -154,21 +159,10 @@ function load(event, path) {
     o.uid = photos[i].uid;
     o.timestamp = exifIndex[photos[i].uid].ts;
     event.photos.push(o);
-    count++;
   }
-  //console.log('Loading ---------> ' + path + ' with, ' + count + ' photos.');
 } 
 
-function serve_html(res, file_path) {
-  serve_file(res, 'text/html', __dirname + file_path);
-}
-
-function serve_file(res, content_type, file_path) {
-  res.header('Content-Type', content_type);
-  var content = fs.readFileSync (file_path, 'utf8');
-  res.send(content);
-}
-
+//recursively compute interval field for event
 function computeIntervals(event) {
   var times = [];
   for (var i=0; i<event.photos.length; i++) {
@@ -188,11 +182,25 @@ function computeIntervals(event) {
   event.interval.end = times[times.length-1];
 }
 
-search.query(query='indiaasdasd').end(function(err, ids) {
+
+//test search functionality
+search.query(query='NY').end(function(err, ids) {
     if(err) {
       res.send(JSON.stringify(result)); throw err;
     }
     var arr = [];
-    ids.forEach(function(id){arr.push(strs[id])});
-    condense(arr)
+    ids.forEach(function(id){ arr.push(strs[id]) });
+    arr = condense(arr);
+    arr.forEach(function(a) { console.log("TEST " + a.title); });
   });
+
+
+function serve_html(res, file_path) {
+  serve_file(res, 'text/html', __dirname + file_path);
+}
+
+function serve_file(res, content_type, file_path) {
+  res.header('Content-Type', content_type);
+  var content = fs.readFileSync (file_path, 'utf8');
+  res.send(content);
+}
