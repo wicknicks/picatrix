@@ -101,6 +101,11 @@ function condense(results) {
     if (splits.length == 1) ev = rootAdd(root, splits[0]);
     else {
       var ix = find(root, splits[0]);
+      if (ix == -1) {
+        ev = rootAdd(root, splits[0]);
+        load(ev, splits[0])
+        ix = find(root, splits[0])
+      }
       ev = leafAdd(root[ix], splits.splice(1, splits.length));
     }
     load(ev, res);
@@ -151,7 +156,7 @@ function load(event, path) {
     event.photos.push(o);
     count++;
   }
-  console.log('Loading ---------> ' + path + ' with, ' + count + ' photos.');
+  //console.log('Loading ---------> ' + path + ' with, ' + count + ' photos.');
 } 
 
 function serve_html(res, file_path) {
@@ -183,7 +188,7 @@ function computeIntervals(event) {
   event.interval.end = times[times.length-1];
 }
 
-search.query(query='india').end(function(err, ids) {
+search.query(query='indiaasdasd').end(function(err, ids) {
     if(err) {
       res.send(JSON.stringify(result)); throw err;
     }
