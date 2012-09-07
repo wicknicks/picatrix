@@ -187,15 +187,15 @@ function computeIntervals(event) {
 /* Sort the hierarchical result set by time. This function sorts by
  * start time only */
 function sortByTime(events) {
-  console.log('>>>>>> Original Order') 
-  events.forEach(function(e){console.log(e.title)});
+  //console.log('>>>>>> Original Order') 
+  //events.forEach(function(e){console.log(e.title)});
 
   events.sort(intervalComparator);
 
-  console.log('>>>>>> Sorted Order') 
-  events.forEach(function(e){console.log(e.title)});
+  //console.log('>>>>>> Sorted Order') 
+  //events.forEach(function(e){console.log(e.title)});
 
-  console.log('------------------- ');
+  //console.log('------------------- ');
 
   events.forEach( function (e) {
     if (e.subevents.length == 0) return;
