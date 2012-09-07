@@ -191,7 +191,7 @@ search.query(query='NY').end(function(err, ids) {
     var arr = [];
     ids.forEach(function(id){ arr.push(strs[id]) });
     arr = condense(arr);
-    //arr.forEach(function(a) { console.log("TEST " + a.title); });
+    arr.forEach(function(a) { console.log("TEST " + a.title); });
   });
 
 
