@@ -75,6 +75,39 @@ function cat(base, arr) {
   for (var i = 0; i < arr.length; i++) base.push(arr[i]);
 }
 
+/*
+options = {ob: "events", 
+           sorted: true, 
+           data = [array of events]}
+*/
+function iterator(cb, options) {
+  options = options || {};
+  if (!('ob' in options)) options.ob = "events";
+  if (!('sorted' in options)) options.sorted = true;
+  
+  var arr = jQuery.extend(true, [], options.data);
+
+  if (options.ob == "events") eiterator(cb, arr, options.sorted, 1);
+  else if (options.ob == "photo") piterator(cb, arr, options.sorted, 1);
+}
+
+function eiterator(cb, arr, sorted, level) {
+  if (sorted) arr.sort(intervalStartSortFunction);
+  for (var i=0; i<arr.length; i++)
+    cb(arr[i], level);
+  for (var i=0; i<arr.length; i++) {
+    if (arr[i].subevents) 
+      eiterator(cb, arr[i].subevents, sorted, level+1)
+  }
+}
+
+function intervalStartSortFunction(x,y) {
+  var p = x.interval.start - y.interval.start;
+  if (p == 0) return 0;
+  if (p < 0) return -1;
+  if (p > 0) return 1;
+}
+
 Converter.prototype.toSeries = function(event, nbins) {
   if (!event.photos) return [[],[]];
   if (event.photos && event.photos.length == 0) return [[],[]];
@@ -110,7 +143,13 @@ Converter.prototype.toSeries = function(event, nbins) {
 
 var query = "";
 var series = "";
-(new Searcher()).keysearch('india 2010', function(events) {
+(new Searcher()).keysearch('trip', function(events) {
     query = events;
+    iterator(titlePrinter, {data: events.arr})
     series =  (new Converter()).toSeries(events.arr[0], 75);
   });
+
+function titlePrinter(e, l) {
+  var lvl = l || "";
+  console.log("tp: " + e.title + " " + lvl);
+}
