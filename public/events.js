@@ -130,8 +130,8 @@ Converter.prototype.toSeries = function(event, nbins) {
   for (var i=0; i<nbins; i++) {
     x[i] = i;
     y[i] = {n: 0, interval: {start: 0, end: 0}};
-    y[i].interval.start = min+gap*i;
-    y[i].interval.end = y[i].interval.start + gap;
+    y[i].interval.start = Math.round(min+gap*i);
+    y[i].interval.end = Math.round(y[i].interval.start + gap);
   }
 
   for (var i=0; i<timestamps.length-1; i++) {
