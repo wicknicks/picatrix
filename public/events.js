@@ -113,6 +113,13 @@ Converter.prototype.toSeries = function(event, nbins) {
   if (event.photos && event.photos.length == 0) return [[],[]];
   if (!nbins) nbins = Math.ceil(event.photos.length / 10);
 
+  if (event.photos.length == 1) {
+    var r = {n: 1, interval: {start: event.photos[0].timestamp, 
+                              end: event.photos[0].timestamp}};
+    r['rpic'] = event.photos[0];
+    return [[0],[r]];
+  }
+
   var x = new Array(nbins);
   var y = new Array(nbins);
   var timestamps = [];
