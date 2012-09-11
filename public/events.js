@@ -122,21 +122,32 @@ Converter.prototype.toSeries = function(event, nbins) {
     timestamps.push(event.photos[i].timestamp);
   }
 
-  for (var i=0; i<nbins; i++) {
-    x[i] = i;
-    y[i] = 0;
-  }
-
   timestamps.sort();
   var min = timestamps[0];
   var max = timestamps[timestamps.length - 1];
   var gap = (max - min)/(nbins);
 
+  for (var i=0; i<nbins; i++) {
+    x[i] = i;
+    y[i] = {n: 0, interval: {start: 0, end: 0}};
+    y[i].interval.start = min+gap*i;
+    y[i].interval.end = y[i].interval.start + gap;
+  }
+
   for (var i=0; i<timestamps.length-1; i++) {
     var ix = (timestamps[i]-min)/gap;
-    y[Math.floor(ix)]++;
+    y[Math.floor(ix)].n++;
   }
-  y[y.length-1]++; //increment for the last element in timestamps
+  y[y.length-1].n++; //increment for the last element in timestamps
+
+  //allocate representative photos to each bin
+  for (var i=0; i<event.photos.length; i++) {
+    var p = event.photos[i];
+    var ix = (p.timestamp-min)/gap;
+    if (ix == nbins) ix--;
+    if (!y[Math.floor(ix)]['rpic'])
+        y[Math.floor(ix)]['rpic'] = p;
+  }
   
   return [x,y];
 };
@@ -145,7 +156,7 @@ var query = "";
 var series = "";
 (new Searcher()).keysearch('trip', function(events) {
     query = events;
-    iterator(titlePrinter, {data: events.arr})
+    //iterator(titlePrinter, {data: events.arr})
     series =  (new Converter()).toSeries(events.arr[0], 75);
   });
 
