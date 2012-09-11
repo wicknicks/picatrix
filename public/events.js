@@ -117,10 +117,11 @@ Converter.prototype.toSeries = function(event, nbins) {
     var r = {n: 1, interval: {start: event.photos[0].timestamp, 
                               end: event.photos[0].timestamp}};
     r['rpic'] = event.photos[0];
-    return [[0],[r]];
+    //return [[0],[r]];
+    return [r];
   }
 
-  var x = new Array(nbins);
+  //var x = new Array(nbins);
   var y = new Array(nbins);
   var timestamps = [];
 
@@ -135,7 +136,7 @@ Converter.prototype.toSeries = function(event, nbins) {
   var gap = (max - min)/(nbins);
 
   for (var i=0; i<nbins; i++) {
-    x[i] = i;
+    //x[i] = i;
     y[i] = {n: 0, interval: {start: 0, end: 0}};
     y[i].interval.start = Math.round(min+gap*i);
     y[i].interval.end = Math.round(y[i].interval.start + gap);
@@ -156,7 +157,8 @@ Converter.prototype.toSeries = function(event, nbins) {
         y[Math.floor(ix)]['rpic'] = p;
   }
   
-  return [x,y];
+  //return [x,y];
+  return y;
 };
 
 var query = "";
