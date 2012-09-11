@@ -64,32 +64,38 @@ app.get('/search', function (req, res, next) {
   });
 
 app.post('/star', function(req, res, next) {
-    console.log('Requesting Star Search');
-    var result = {}
-    result.n = strs.length;
-    result.arr = [];
-    for(var i=0; i<strs.length; i++) result.arr.push(strs);
-    result.arr = condense(result.arr);
-    res.send((result));
-  });
+  console.log('Requesting Star Search');
+  var result = {};
+  result.n = strs.length;
+  result.arr = [];
+  for(var i=0; i<strs.length; i++) result.arr.push(strs);
+  result.arr = condense(result.arr);
+  sortByTime(result.arr);
+  res.send((result));
+});
 
 app.post('/search', function (req, res, next) {
-    var query = req.body.query;
-    console.log('query req: %s', query);
-    var result = {query: query};
-    result.n = 0;
-    result.arr = [];
-    search.query(query=query).end(function(err, ids) {
-	if(err) {
-	  res.send(JSON.stringify(result)); throw err;
-	}
-	ids.forEach(function(id){result.arr.push(strs[id])});
-	result.n = result.arr.length;
-  result.arr = condense(result.arr);
-	res.send((result));
-      });
+  var query = req.body.query;
+  console.log('query req: %s', query);
+  var result = {query: query};
+  result.n = 0;
+  result.arr = [];
+  search.query(query=query).end(function(err, ids) {
+	  if(err) {
+	    res.send(JSON.stringify(result)); throw err;
+	  }
+	  ids.forEach(function(id){result.arr.push(strs[id])});
+	  result.n = result.arr.length;
+    result.arr = condense(result.arr);
+    sortByTime(result.arr);
+ 	  res.send((result));
   });
+});
 
+
+/* convert a list of results into an array of hierarchical objects
+   (which specify subevent relationships between parent and child
+   events) */
 function condense(results) {
   results = results.sort();
   var root = []; count=0;
@@ -145,7 +151,8 @@ function rootAdd(root, nm) {
   return event; //return the index
 }
 
-var count = 0;
+
+//load photo content for each event
 function load(event, path) {
   if (!event.photos) event.photos = [];
   for (var i=0; i<photos.length; i++) {
@@ -154,21 +161,10 @@ function load(event, path) {
     o.uid = photos[i].uid;
     o.timestamp = exifIndex[photos[i].uid].ts;
     event.photos.push(o);
-    count++;
   }
-  //console.log('Loading ---------> ' + path + ' with, ' + count + ' photos.');
-} 
-
-function serve_html(res, file_path) {
-  serve_file(res, 'text/html', __dirname + file_path);
 }
 
-function serve_file(res, content_type, file_path) {
-  res.header('Content-Type', content_type);
-  var content = fs.readFileSync (file_path, 'utf8');
-  res.send(content);
-}
-
+//recursively compute interval field for event
 function computeIntervals(event) {
   var times = [];
   for (var i=0; i<event.photos.length; i++) {
@@ -188,11 +184,49 @@ function computeIntervals(event) {
   event.interval.end = times[times.length-1];
 }
 
-search.query(query='indiaasdasd').end(function(err, ids) {
-    if(err) {
-      res.send(JSON.stringify(result)); throw err;
-    }
-    var arr = [];
-    ids.forEach(function(id){arr.push(strs[id])});
-    condense(arr)
+/* Sort the hierarchical result set by time. This function sorts by
+ * start time only */
+function sortByTime(events) {
+  //console.log('>>>>>> Original Order') 
+  //events.forEach(function(e){console.log(e.title)});
+
+  events.sort(intervalComparator);
+
+  //console.log('>>>>>> Sorted Order') 
+  //events.forEach(function(e){console.log(e.title)});
+
+  //console.log('------------------- ');
+
+  events.forEach( function (e) {
+    if (e.subevents.length == 0) return;
+    sortByTime(e.subevents);
   });
+}
+
+function intervalComparator(ea, eb) {
+  var d = ea.interval.start - eb.interval.end;
+  //console.log(eb.title + " <> " + ea.title + " " + d);
+  return d;
+}
+
+//test search functionality
+search.query(query='NY').end(function(err, ids) {
+  if(err) {
+    res.send(JSON.stringify(result)); throw err;
+  }
+  var arr = [];
+  ids.forEach(function(id){ arr.push(strs[id]) });
+  arr = condense(arr);
+  sortByTime(arr);
+  arr.forEach(function(a) { console.log("TEST " + a.title + " " + JSON.stringify(a.interval)); });
+});
+
+function serve_html(res, file_path) {
+  serve_file(res, 'text/html', __dirname + file_path);
+}
+
+function serve_file(res, content_type, file_path) {
+  res.header('Content-Type', content_type);
+  var content = fs.readFileSync (file_path, 'utf8');
+  res.send(content);
+}
