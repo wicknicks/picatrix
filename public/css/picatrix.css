@@ -1,0 +1,165 @@
+/*
+@font-face{font-family:DIN_Light; src:url(../fnt/DINWebPro-Light.eot)}
+@font-face{font-family:DIN_Light; src:url(../fnt/DINWebPro-Light.woff)}
+@font-face{font-family:DIN_Regular; src:url(../fnt/DINWebPro.eot)}
+@font-face{font-family:DIN_Regular; src:url(../fnt/DINWebPro.woff)}
+@font-face{font-family:DIN; src:url(../fnt/DINWebPro-Medium.eot)}
+@font-face{font-family:DIN; src:url(../fnt/DINWebPro-Medium.woff)}
+@font-face{font-family:DIN; font-weight:600; src:url(../fnt/DINWebPro-Medium.eot)}
+@font-face{font-family:DIN; font-weight:600; src:url(../fnt/DINWebPro-Medium.woff)}
+@font-face{font-family:DIN; font-weight:bold; src:url(../fnt/DINWebPro-Bold.eot)}
+@font-face{font-family:DIN; font-weight:bold; src:url(../fnt/DINWebPro-Bold.woff)}
+*/
+
+html,body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+html {
+	font-size: 100.01%; /* Opera */ /* 100% = 16px */
+}
+body {
+	text-align: center;
+	line-height: 100%;
+	font-family: DIN,Helvetica,Arial,sans-serif;
+	background-color: transparent;
+	background-image: url(../img/bg-dark.jpg);
+	background-repeat: repeat;
+	background-attachment: fixed;
+	background-position: center;
+	opacity: 1;
+}
+body.enable {
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat;
+	background-attachment: scroll;
+	background-position: 0% 0%;
+	opacity: 1;
+}
+div,p,span,a,img,table,tr,td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+a { text-decoration: none; }
+a:focus { outline: 0; }
+a:link {  }
+a:visited {  }
+a:hover {  }
+a:active {  }
+
+#disableBox {
+	width: 100%;
+	height: 100%;
+	text-align: left;
+}
+#disableBox #v {
+	float: left;
+	width: 100%;
+	height: 50%;
+	margin-top: -75px; /* half vertical height = 150 / 2 = 75px */
+}
+/* TODO: need to convert pixels to % or ems */
+#disableBox #h {
+	width: 400px;
+	height: 150px; /* vertical height = 150px */
+	margin: 0 auto;
+	padding: 0;
+	border: 0;
+	overflow: auto; /* allow content to scroll inside element */
+	clear: both;
+}
+#disableBox table#c {
+	width: 100%;
+	height: 100%;
+	text-align: left;
+	border-collapse: collapse;
+}
+#disableBox table#c td {
+	text-align: center;
+	vertical-align: middle;
+	background: purple;/*  */
+	color: #fff;
+}
+#disableBox table#c td a {
+	color: #0c9acb;
+}
+#disableBox table#c td img {
+	margin-right: 0.50em; /* 2% or 8px */
+	vertical-align: middle;
+}
+
+#searchBox {
+	height: 50px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: beige;
+	/*white-space: nowrap;*/
+}
+#searchBox img, #searchBox input, #searchBox span, #searchBox select, 
+#searchBox button, #searchBox input, #searchBox label {
+	vertical-align: middle;
+}
+#searchBox span {
+	line-height: 50px;
+}
+
+#viewBox {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	text-align: left;
+	overflow: hidden;
+	
+	background: red;
+}
+#viewGallery {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style-type: none;
+	list-style: none;
+}
+#viewGallery li {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	float: left;
+    /* BEGIN optional parameters
+	display: block;
+    line-height: 200px;
+     END optional parameters */
+}
+#viewGallery li img {
+	margin: 0;
+	padding: 0;
+	border: 0;
+    /* optional parameters
+	vertical-align: middle;
+    */
+}
+
+#controlBox {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	/*
+	text-align: left;
+	background: green;
+	*/
+}
+
+#previewBox {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	text-align: left;
+	overflow: hidden;
+	
+	background: orange;
+}
