@@ -182,9 +182,9 @@ $(document).ready(function() {
 	            display : 'block',
 	            float : 'left'
             });
-            c.fillStyle = 'red';
+            //c.fillStyle = 'red';
             //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-	        //c.fillStyle = (i % 2 === 0) ? 'red' : 'blue';
+	        c.fillStyle = (i % 2 === 0) ? 'red' : 'blue';
             c.fillRect(0, 0, hWidth, histogramWrap.height());
 		}
 		
