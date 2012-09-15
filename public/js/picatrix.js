@@ -221,17 +221,32 @@ $(document).ready(function() {
 		            //console.log("i: "+ i);
 		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
 		            var b = (eventRegions[j][1]-(i*canvasMaxWidth));
-		            console.log(a + "___" + (b-a));
-		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
-		            c.fillStyle = (j % 2 === 0) ? '#EEE' : '#CFCFCF';
+		            //console.log(a + "___" + (b-a));
+		            c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
 		            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-		            console.log("c.fillRect("+a+", "+(0)+", "+(b-a)+", "+(histogramWrap.height()/2)+")");
+		            //console.log("c.fillRect("+a+", "+(0)+", "+(b-a)+", "+(histogramWrap.height()/2)+")");
 		            c.fillRect(a, 0, (b-a), histogramWrap.height());
 		        }
+		        if (eventRegions[j][0] >= absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] > absEnd) {
+		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
+		            var b = ((i+1)*canvasMaxWidth)-a
+		            console.log(a + "___" + b);
+		            
+		            c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
+		            c.fillRect(a, 0, b, histogramWrap.height());
+		        }
+		        if (eventRegions[j][0] < absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] <= absEnd) {
+		            var a = 0;
+		            var b = (eventRegions[j][1]-(i*canvasMaxWidth));
+		            console.log(a + "+++" + b);
+		            
+		            c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
+		            c.fillRect(a, 0, b, histogramWrap.height());
+		        }
 		    }
-		    /*
-		    */
 		}
+		/*
+		*/
 		
 		/*
         var h1 = $('#histogram_0');
