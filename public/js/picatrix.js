@@ -44,7 +44,7 @@ $(document).ready(function() {
 	
 	//var viewGallery = $('#viewGallery');
 	
-	searcher.keysearch('ted', function(events) {
+	searcher.keysearch('trip', function(events) {
 		
 		/* TESTING
 		// events;                                  // Object
@@ -123,16 +123,12 @@ $(document).ready(function() {
             }
 		}
 		canvasAmount = Math.ceil(estimatedHistogramWidth/canvasMaxWidth);
-	    // TEST estimatedHistogramWidth = canvasMaxWidth * 5;
 		
 		console.log("MAX VALUE: " + maxValue);
 		console.log("BROWSER WIDTH: " + browserWidth);
+		console.log("CANVAS MAX WIDTH: " + canvasMaxWidth);
 		console.log("ESTIMATED HISTOGRAM WIDTH: " + estimatedHistogramWidth);
 		console.log("CANVAS AMOUNT: " + canvasAmount);
-		
-		for (var i = 0; i < canvasAmount; i++) {
-		    histogramWrap.append('<canvas id="histogram_'+i+'"></canvas>');
-		}
 		
 		searchBox.css({
 			width : $(window).width(),
@@ -152,7 +148,7 @@ $(document).ready(function() {
 			width : $(window).width(),
 			height : $(window).height() - searchBox.height() - viewBox.height(),
 			minHeight : 100,
-			backgroundColor : 'purple'
+			backgroundColor : '#000'
 		});
 		
 		histogramWrap.css({
@@ -169,6 +165,11 @@ $(document).ready(function() {
 		    });
 		}
 		
+		// APPEND CANVAS TO DOM
+		for (var i = 0; i < canvasAmount; i++) {
+		    histogramWrap.append('<canvas id="histogram_'+i+'"></canvas>');
+		}
+		// COLOR ALL CANVAS(ES) WHITE
 		for (var i = 0; i < canvasAmount; i++) {
 		    var h = $('#histogram_'+i);
 		    var c = h[0].getContext("2d");
@@ -181,10 +182,78 @@ $(document).ready(function() {
 	            display : 'block',
 	            float : 'left'
             });
-            c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+            c.fillStyle = 'red';
+            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+	        //c.fillStyle = (i % 2 === 0) ? 'red' : 'blue';
             c.fillRect(0, 0, hWidth, histogramWrap.height());
 		}
-	    
+		
+		var eventRegions = [];
+		var xSum = 0;
+		var xCoord = 0;
+		for (var i = 0; i < events.arr.length; i++) {
+		    var subEventWidth = (events.arr[i].photos.length * histogramBarWidth + (events.arr[i].photos.length + 1) * histogramBarSpacing);
+		    xSum += subEventWidth;
+		    //console.log(xSum);
+		    //console.log(subEventWidth);
+		    //console.log(xCoord);
+		    eventRegions.push([xCoord, xSum]);
+	        xCoord += subEventWidth;
+		}
+		//console.log(eventRegions);
+		
+		// COLOR EVENT REGIONS
+		for (var i = 0; i < canvasAmount; i++) {
+	        var h = $('#histogram_'+i);
+	        var c = h[0].getContext("2d");
+	        
+	        var absBegin = (i*canvasMaxWidth);
+	        //var end = (i < canvasAmount-1) ? canvasMaxWidth : estimatedHistogramWidth - ((canvasAmount-1) * canvasMaxWidth);
+	        //var absEnd = end+(i*canvasMaxWidth);
+	        var absEnd = (i < canvasAmount-1) ? (canvasMaxWidth+(i*canvasMaxWidth)) : ((estimatedHistogramWidth - ((canvasAmount-1) * canvasMaxWidth))+(i*canvasMaxWidth)) ;
+	        
+	        console.log("abs begin: " + (absBegin) + " \nabs end: " + (absEnd));
+	        
+		    console.log(eventRegions);
+		    for (var j = 0; j < eventRegions.length; j++) {
+		        if (eventRegions[j][0] >= absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] <= absEnd) {
+		            //console.log(eventRegions[j]);
+		            //console.log("i: "+ i);
+		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
+		            var b = (eventRegions[j][1]-(i*canvasMaxWidth));
+		            console.log(a + "___" + (b-a));
+		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
+		            c.fillStyle = (j % 2 === 0) ? '#EEE' : '#CFCFCF';
+		            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+		            console.log("c.fillRect("+a+", "+(0)+", "+(b-a)+", "+(histogramWrap.height()/2)+")");
+		            c.fillRect(a, 0, (b-a), histogramWrap.height());
+		        }
+		    }
+		    /*
+		    */
+		}
+		
+		/*
+        var h1 = $('#histogram_0');
+        var c1 = h1[0].getContext("2d");
+        c1.fillStyle = '#EEE';
+        c1.fillRect(0, 0, 17, 101.5);
+        c1.fillStyle = '#CFCFCF';
+        c1.fillRect(17, 0, 225, 101.5);
+        c1.fillStyle = 'green';
+        c1.fillRect(242, 0, 3921, 101.5);
+        c1.fillStyle = 'purple';
+        c1.fillRect(4163, 0, 2385, 101.5);
+        c1.fillStyle = 'yellow';
+        c1.fillRect(6548, 0, 5793, 101.5);
+        c1.fillStyle = 'orange';
+        c1.fillRect(12341, 0, 1489, 101.5);
+        c1.fillStyle = 'pink';
+        c1.fillRect(13830, 0, 8145, 101.5);
+        c1.fillStyle = 'aqua';
+        c1.fillRect(21975, 0, 3073, 101.5);
+		*/
+		
 	    /*
 		var beginTimestamp = Number.MAX_VALUE;
 		var endTimestamp = Number.MIN_VALUE;
