@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	var histogramBarWidth = 2100;
+	var histogramBarWidth = 15;
 	var histogramBarSpacing = 1;
 	var browserWidth = $(window).width();
 	var canvasMaxWidth = 32766;
@@ -63,7 +63,7 @@ $(document).ready(function() {
 	//var viewGallery = $('#viewGallery');
 	
 	var searcher = new Searcher();
-	searcher.keysearch('ted', function(events) {
+	searcher.keysearch('trip', function(events) {
 		var histValues = [];
 		var eventRegions = [];
 		var xCoord = 0;
