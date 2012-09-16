@@ -166,64 +166,33 @@ $(document).ready(function() {
 		    //console.log(eventRegions);
 		    for (var j = 0; j < eventRegions.length; j++) {
 		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
-		            //console.log(eventRegions[j]);
 		            //console.log("i: "+ i);
+		            //console.log(eventRegions[j]);
 		            
-		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
-		            var b = (eventRegions[j][1]-(i*canvasMaxWidth))-a;
-		            //console.log(a + "___" + (b-a));
+		            var x = (eventRegions[j][0]-(i*canvasMaxWidth));
+		            var width = (eventRegions[j][1]-(i*canvasMaxWidth))-x;
 		            
-		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
 		            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
 		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            //console.log("c.fillRect("+a+", "+(0)+", "+(b-a)+", "+(histogramWrap.height()/2)+")");
-		            c.fillRect(a, 0, b, histogramWrap.height()-10);
+		            c.fillRect(x, 0, width, histogramWrap.height()/2);
 		        }
 		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] > end) {
-		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
-		            var b = ((i+1)*canvasMaxWidth)-a
-		            //console.log(a + "___" + b);
+		            var x = (eventRegions[j][0]-(i*canvasMaxWidth));
+		            var width = ((i+1)*canvasMaxWidth)-x;
 		            
-		            //c.fillStyle = "orange";
 		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            c.fillRect(a, 0, b, histogramWrap.height()-10);
+		            c.fillRect(x, 0, width, histogramWrap.height()/2);
 		        }
 		        if (eventRegions[j][0] < start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
-		            var a = 0;
-		            var b = (eventRegions[j][1]-(i*canvasMaxWidth));
-		            //console.log(a + "+++" + b);
+		            var x = 0;
+		            var width = (eventRegions[j][1]-(i*canvasMaxWidth));
 		            
 		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            //c.fillStyle = "orange";
-		            c.fillRect(a, 0, b, histogramWrap.height()-10);
+		            c.fillRect(x, 0, width, histogramWrap.height()/2);
 		        }
 		    }
 		}
-		
-        /* TEST_COLOR_EVENTREGION
-		var h1 = $('#histogram_'+0);
-		var c1 = h[0].getContext("2d");
-        c1.fillStyle = 'orange';
-        c1.fillRect(0, 0, 17, histogramWrap.height());
-        c1.fillStyle = 'green';
-        c1.fillRect(17, 0, 65, histogramWrap.height());
-        c1.fillStyle = 'orange';
-        c1.fillRect(82, 0, 577, histogramWrap.height());
-        c1.fillStyle = 'green';
-        c1.fillRect(659, 0, 513, histogramWrap.height());
-        c1.fillStyle = 'orange';
-        c1.fillRect(1172, 0, 465, histogramWrap.height());
-        c1.fillStyle = 'green';
-        c1.fillRect(1637, 0, 97, histogramWrap.height());
-        c1.fillStyle = 'orange';
-        c1.fillRect(1734, 0, 129, histogramWrap.height());
-        c1.fillStyle = 'green';
-        c1.fillRect(1863, 0, 561, histogramWrap.height());
-        c1.fillStyle = 'orange';
-        c1.fillRect(2424, 0, 81, histogramWrap.height());
-        c1.fillStyle = 'green';
-        c1.fillRect(2505, 0, 369, histogramWrap.height());
-        */
 		
 		/*
 		*/
@@ -234,12 +203,62 @@ $(document).ready(function() {
 	        
 	        var start = (i*canvasMaxWidth);
 	        var end = (i < canvasAmount-1) ? (canvasMaxWidth+(i*canvasMaxWidth)) : ((estimatedHistogramWidth - ((canvasAmount-1) * canvasMaxWidth))+(i*canvasMaxWidth)) ;
-	        //console.log("start: " + (start) + " \nend: " + (end));
+	        console.log("start: " + (start) + " \nend: " + (end));
 		    
+		    //console.log(eventRegions.length);
+		    //console.log(eventRegions);
 		    for (var j = 0; j < eventRegions.length; j++) {
 		    	//console.log(eventRegions[j]);
 		    	//console.log(eventRegions[j][0]);
 		    	
+		    	
+		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
+		            //console.log("i: "+ i);
+		            console.log("within region");
+		    		//console.log(eventRegions[j]);
+		    		
+		    		// begin test
+		    		/*
+		    		console.log(eventRegions[j][0]);
+		    		console.log(eventRegions[j][1]);
+		    		
+		    		console.log(histValues[j]);
+		    		
+		    		c.fillStyle = 'aqua';
+		    		c.fillRect(eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*0, histogramWrap.height() - heightScale*histValues[j][0], histogramBarWidth, heightScale*histValues[j][0]);
+		    		c.fillStyle = 'orange';
+		    		c.fillRect(eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*1, histogramWrap.height() - heightScale*histValues[j][1], histogramBarWidth, heightScale*histValues[j][1]);
+		    		*/
+		    		for (var k = 0; k < histValues[j].length; k++) {
+		    			//console.log(k);
+		    			//console.log(histValues[j][k]);
+		    			
+		    			c.fillStyle = 'aqua';
+		    			
+		    			//console.log(eventRegions[j]);
+		    			
+		    			console.log("c.fillRect(" + (eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*k) + ", " + (histogramWrap.height() - heightScale*histValues[j][k]) + ", " + histogramBarWidth +", " +heightScale*histValues[j][k]+")");
+		    			
+		    			c.fillRect(eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*k, histogramWrap.height() - heightScale*histValues[j][k], histogramBarWidth, heightScale*histValues[j][k]/4);
+		    			//c.fillRect(eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*k, 0, histogramBarWidth, heightScale*histValues[j][k]-20);
+		    		}
+		    		// end test
+		    		
+		        }
+		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] > end) {
+		            //console.log("i: "+ i);
+		            //console.log("partial right region");
+		    		//console.log(eventRegions[j]);
+		    		//console.log(eventRegions[j][0]);
+		        }
+		        if (eventRegions[j][0] < start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
+		            //console.log("i: "+ i);
+		            //console.log("partial left region");
+		    		//console.log(eventRegions[j]);
+		    		//console.log(eventRegions[j][0]);
+		        }
+		    	
+		    	/*
 		    	//console.log(histValues[j].length);
 		    	for (var k = 0; k < histValues[j].length; k++) {
 		    		//console.log(k);
@@ -249,6 +268,7 @@ $(document).ready(function() {
 		    		//c.fillRect(eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*k, histogramWrap.height() - heightScale*histValues[j][k], histogramBarWidth, heightScale*histValues[j][k]);
 		    		c.fillRect(eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*k, 0, histogramBarWidth, heightScale*histValues[j][k]-20);
 		    	}
+		    	*/
 		    	
 		    	/*
 		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
