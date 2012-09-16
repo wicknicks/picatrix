@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	var histogramBarWidth = 200;
+	var histogramBarWidth = 15;
 	var histogramBarSpacing = 1;
 	var browserWidth = $(window).width();
 	var canvasMaxWidth = 32766;
@@ -87,7 +87,7 @@ $(document).ready(function() {
             }
             var w = (values.length * histogramBarWidth + (values.length + 1) * histogramBarSpacing);
             //console.log(values.length);
-            console.log(w);
+            //console.log(w);
             //console.log(values);
             estimatedHistogramWidth += w;
 		    eventRegions.push([xCoord, w+xCoord]);
@@ -161,7 +161,7 @@ $(document).ready(function() {
 	        
 	        var start = (i*canvasMaxWidth);
 	        var end = (i < canvasAmount-1) ? (canvasMaxWidth+(i*canvasMaxWidth)) : ((estimatedHistogramWidth - ((canvasAmount-1) * canvasMaxWidth))+(i*canvasMaxWidth)) ;
-	        console.log("start: " + (start) + " \nend: " + (end));
+	        //console.log("start: " + (start) + " \nend: " + (end));
 	        
 		    //console.log(eventRegions);
 		    for (var j = 0; j < eventRegions.length; j++) {
@@ -198,12 +198,9 @@ $(document).ready(function() {
 		            c.fillRect(a, 0, b, histogramWrap.height());
 		        }
 		    }
-	        
-	        
-	        
-	        
 		}
-        /*
+		
+        /* TEST_COLOR_EVENTREGION
 		var h1 = $('#histogram_'+0);
 		var c1 = h[0].getContext("2d");
         c1.fillStyle = 'orange';
@@ -227,8 +224,66 @@ $(document).ready(function() {
         c1.fillStyle = 'green';
         c1.fillRect(2505, 0, 369, histogramWrap.height());
         */
-        
-        /*
+		
+		/*
+		*/
+		// COLOR HISTOGRAM BARS
+		for (var i = 0; i < canvasAmount; i++) {
+	        var h = $('#histogram_'+i);
+	        var c = h[0].getContext("2d");
+	        
+	        var start = (i*canvasMaxWidth);
+	        var end = (i < canvasAmount-1) ? (canvasMaxWidth+(i*canvasMaxWidth)) : ((estimatedHistogramWidth - ((canvasAmount-1) * canvasMaxWidth))+(i*canvasMaxWidth)) ;
+	        //console.log("start: " + (start) + " \nend: " + (end));
+		    
+		    for (var j = 0; j < eventRegions.length; j++) {
+		    	//console.log(eventRegions[j]);
+		    	//console.log(eventRegions[j][0]);
+		    	
+		    	//console.log(histValues[j].length);
+		    	for (var k = 0; k < histValues[j].length; k++) {
+		    		//console.log(k);
+		    		//console.log(histValues[j][k]);
+		    		
+		    		c.fillStyle = 'aqua';
+		    		c.fillRect(eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*k, histogramWrap.height() - heightScale*histValues[j][k], histogramBarWidth, heightScale*histValues[j][k]);
+		    	}
+		    	
+		    	/*
+		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
+		            //console.log("i: "+ i);
+		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
+		            var b = (eventRegions[j][1]-(i*canvasMaxWidth))-a;
+		            //console.log(a + "___" + (b-a));
+		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
+		            //c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
+		            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+		            //console.log("c.fillRect("+a+", "+(0)+", "+(b-a)+", "+(histogramWrap.height()/2)+")");
+		            //c.fillRect(a, 0, b, histogramWrap.height());
+		        }
+		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] > end) {
+		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
+		            var b = ((i+1)*canvasMaxWidth)-a
+		            //console.log(a + "___" + b);
+		            
+		            //c.fillStyle = "orange";
+		            //c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
+		            //c.fillRect(a, 0, b, histogramWrap.height());
+		        }
+		        if (eventRegions[j][0] < start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
+		            var a = 0;
+		            var b = (eventRegions[j][1]-(i*canvasMaxWidth));
+		            //console.log(a + "+++" + b);
+		            
+		            //c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
+		            //c.fillStyle = "orange";
+		            //c.fillRect(a, 0, b, histogramWrap.height());
+		        }
+		        */
+		    }
+		}
+		
+        /* 
         c1.fillStyle = '#CFCFCF';
         c1.fillRect(17, 0, 225, 101.5);
         c1.fillStyle = 'green';
@@ -244,137 +299,7 @@ $(document).ready(function() {
         c1.fillStyle = 'aqua';
         c1.fillRect(21975, 0, 3073, 101.5);
         */
-		
-		/*
-		var eventRegions = [];
-		var xSum = 0;
-		var xCoord = 0;
-		for (var i = 0; i < events.arr.length; i++) {
-		
-            var s = converter.toSeries(events.arr[i], 75);
-            
-            for (var j = 0; j < s.length; j++) {
-                if (s[j].n > 0) {
-				    values.push(s[j].n);
-                    //console.log("\t"+s[j].n);
-                    //console.log("\t"+s[j].interval.start + "-" + s[j].interval.start);
-                }
-            }
-		    var subEventWidth = (events.arr[i].photos.length * histogramBarWidth + (events.arr[i].photos.length + 1) * histogramBarSpacing);
-		    xSum += subEventWidth;
-		    //console.log(xSum);
-		    //console.log(subEventWidth);
-		    //console.log(xCoord);
-		    eventRegions.push([xCoord, xSum]);
-	        xCoord += subEventWidth;
-		}
-		*/
-		
-		/*
-		// COLOR EVENT REGIONS
-		for (var i = 0; i < canvasAmount; i++) {
-	        var h = $('#histogram_'+i);
-	        var c = h[0].getContext("2d");
-	        
-	        var absBegin = (i*canvasMaxWidth);
-	        var absEnd = (i < canvasAmount-1) ? (canvasMaxWidth+(i*canvasMaxWidth)) : ((estimatedHistogramWidth - ((canvasAmount-1) * canvasMaxWidth))+(i*canvasMaxWidth)) ;
-	        //console.log("abs begin: " + (absBegin) + " \nabs end: " + (absEnd));
-	        
-		    //console.log(eventRegions);
-		    for (var j = 0; j < eventRegions.length; j++) {
-		        if (eventRegions[j][0] >= absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] <= absEnd) {
-		            //console.log(eventRegions[j]);
-		            //console.log("i: "+ i);
-		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
-		            var b = (eventRegions[j][1]-(i*canvasMaxWidth))-a;
-		            //console.log(a + "___" + (b-a));
-		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
-		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-		            //console.log("c.fillRect("+a+", "+(0)+", "+(b-a)+", "+(histogramWrap.height()/2)+")");
-		            c.fillRect(a, 0, b, histogramWrap.height());
-		        }
-		        if (eventRegions[j][0] >= absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] > absEnd) {
-		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
-		            var b = ((i+1)*canvasMaxWidth)-a
-		            //console.log(a + "___" + b);
-		            
-		            //c.fillStyle = "orange";
-		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            c.fillRect(a, 0, b, histogramWrap.height());
-		        }
-		        if (eventRegions[j][0] < absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] <= absEnd) {
-		            var a = 0;
-		            var b = (eventRegions[j][1]-(i*canvasMaxWidth));
-		            //console.log(a + "+++" + b);
-		            
-		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            //c.fillStyle = "orange";
-		            c.fillRect(a, 0, b, histogramWrap.height());
-		        }
-		    }
-		}
-		*/
-		
-		/*
-		// COLOR HISTOGRAM BARS
-		for (var i = 0; i < canvasAmount; i++) {
-	        var h = $('#histogram_'+i);
-	        var c = h[0].getContext("2d");
-	        
-	        var absBegin = (i*canvasMaxWidth);
-	        var absEnd = (i < canvasAmount-1) ? (canvasMaxWidth+(i*canvasMaxWidth)) : ((estimatedHistogramWidth - ((canvasAmount-1) * canvasMaxWidth))+(i*canvasMaxWidth)) ;
-	        //console.log("abs begin: " + (absBegin) + " \nabs end: " + (absEnd));
-	        
-		    //console.log(eventRegions);
-		    //console.log(eventRegions.length);
-		    
-		    for (var j = 0; j < eventRegions.length; j++) {
-		    	//console.log(eventRegions[j]);
-		    	//console.log(eventRegions[j][0]);
-		    	
-		    	//console.log(histValues[j].length);
-		    	for (var k = 0; k < histValues[j].length; k++) {
-		    		console.log(k);
-		    		//console.log(histValues[j][k]);
-		    		
-		    		c.fillStyle = 'white';
-		    		c.fillRect(eventRegions[j][0]+histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*k, histogramWrap.height() - heightScale*histValues[j][k], histogramBarWidth, heightScale*histValues[j][k]);
-		    	}
-		    	
-		        if (eventRegions[j][0] >= absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] <= absEnd) {
-		            //console.log("i: "+ i);
-		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
-		            var b = (eventRegions[j][1]-(i*canvasMaxWidth))-a;
-		            //console.log(a + "___" + (b-a));
-		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
-		            //c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-		            //console.log("c.fillRect("+a+", "+(0)+", "+(b-a)+", "+(histogramWrap.height()/2)+")");
-		            //c.fillRect(a, 0, b, histogramWrap.height());
-		        }
-		        if (eventRegions[j][0] >= absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] > absEnd) {
-		            var a = (eventRegions[j][0]-(i*canvasMaxWidth));
-		            var b = ((i+1)*canvasMaxWidth)-a
-		            //console.log(a + "___" + b);
-		            
-		            //c.fillStyle = "orange";
-		            //c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            //c.fillRect(a, 0, b, histogramWrap.height());
-		        }
-		        if (eventRegions[j][0] < absBegin && eventRegions[j][1] >= absBegin && eventRegions[j][0] <= absEnd && eventRegions[j][1] <= absEnd) {
-		            var a = 0;
-		            var b = (eventRegions[j][1]-(i*canvasMaxWidth));
-		            //console.log(a + "+++" + b);
-		            
-		            //c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            //c.fillStyle = "orange";
-		            //c.fillRect(a, 0, b, histogramWrap.height());
-		        }
-		    }
-		}
-		*/
-		
+        
 		/*
 		*/
 		
@@ -400,25 +325,6 @@ $(document).ready(function() {
         c1.fillRect(histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*7, 1, histogramBarWidth, 126);
         c1.fillRect(histogramBarSpacing+(histogramBarWidth+histogramBarSpacing)*8, 1, histogramBarWidth, 126);
         */
-        
-        
-		/*
-        c1.fillRect(0, 0, 17, 101.5);
-        c1.fillStyle = '#CFCFCF';
-        c1.fillRect(17, 0, 225, 101.5);
-        c1.fillStyle = 'green';
-        c1.fillRect(242, 0, 3921, 101.5);
-        c1.fillStyle = 'purple';
-        c1.fillRect(4163, 0, 2385, 101.5);
-        c1.fillStyle = 'yellow';
-        c1.fillRect(6548, 0, 5793, 101.5);
-        c1.fillStyle = 'orange';
-        c1.fillRect(12341, 0, 1489, 101.5);
-        c1.fillStyle = 'pink';
-        c1.fillRect(13830, 0, 8145, 101.5);
-        c1.fillStyle = 'aqua';
-        c1.fillRect(21975, 0, 3073, 101.5);
-		*/
 		
 	    /*
 		var beginTimestamp = Number.MAX_VALUE;
