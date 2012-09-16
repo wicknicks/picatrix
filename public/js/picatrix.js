@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	var histogramBarWidth = 15;
+	var histogramBarWidth = 200;
 	var histogramBarSpacing = 1;
 	var browserWidth = $(window).width();
 	var canvasMaxWidth = 32766;
@@ -283,35 +283,7 @@ $(document).ready(function() {
 		    }
 		}
 		
-        /* 
-        c1.fillStyle = '#CFCFCF';
-        c1.fillRect(17, 0, 225, 101.5);
-        c1.fillStyle = 'green';
-        c1.fillRect(242, 0, 3921, 101.5);
-        c1.fillStyle = 'purple';
-        c1.fillRect(4163, 0, 2385, 101.5);
-        c1.fillStyle = 'yellow';
-        c1.fillRect(6548, 0, 5793, 101.5);
-        c1.fillStyle = 'orange';
-        c1.fillRect(12341, 0, 1489, 101.5);
-        c1.fillStyle = 'pink';
-        c1.fillRect(13830, 0, 8145, 101.5);
-        c1.fillStyle = 'aqua';
-        c1.fillRect(21975, 0, 3073, 101.5);
-        */
-        
-		/*
-		*/
-		
-		/*
-		console.log("EVENTREGIONS LENGTH: " + eventRegions.length);
-		for (var i = 0; i < eventRegions.length; i++) {
-			//console.log(eventRegions[i]);
-			console.log(eventRegions[i][0]);
-		}
-		*/
-		
-		/*
+		/* TEST HISTOGRAM BAR DRAW
         var h1 = $('#histogram_0');
         var c1 = h1[0].getContext("2d");
         c1.fillStyle = 'white';
@@ -359,6 +331,18 @@ $(document).ready(function() {
 		    }
 		}
 		*/
+		
+		/*
+		*/
+		
+		/*
+		console.log("EVENTREGIONS LENGTH: " + eventRegions.length);
+		for (var i = 0; i < eventRegions.length; i++) {
+			//console.log(eventRegions[i]);
+			console.log(eventRegions[i][0]);
+		}
+		*/
+		
 	});
 	
 	$('#searchBox').submit(function(event) {
