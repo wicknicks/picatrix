@@ -233,7 +233,8 @@ $(document).ready(function() {
 		    			//console.log(k);
 		    			//console.log(histValues[j][k]);
 		    			
-		    			c.fillStyle = 'aqua';
+		    			//c.fillStyle = 'aqua';
+		    			c.fillStyle = (k % 2 === 0) ? 'aqua' : 'orange';
 		    			
 		    			//console.log(eventRegions[j]);
 		    			
