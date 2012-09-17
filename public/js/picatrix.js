@@ -242,6 +242,11 @@ $(document).ready(function() {
 		    			if (width > 0) {
 		    				//c.fillStyle = '#808080';
 		    				c.fillStyle = 'darkorange';
+		    				// begin test
+		    				if (width !== histogramBarWidth) {
+		    					c.fillStyle = 'aqua';
+		    				}
+		    				// end test
 		    				//c.fillStyle = (k % 2 === 0) ? 'darkred' : 'orange';
 		    				c.fillRect(x , histogramWrap.height() - heightScale*histValues[j][k], width, heightScale*histValues[j][k]);
 		    			}
