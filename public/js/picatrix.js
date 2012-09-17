@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	var histogramBarWidth = 2100;
+	var histogramBarWidth = 32100;
 	var histogramBarSpacing = 1;
 	var browserWidth = $(window).width();
 	var canvasMaxWidth = 32766; //(2^15)-2
@@ -192,114 +192,6 @@ $(document).ready(function() {
 		    }
 		}
 		
-		/*
-		*/
-		// COLOR HISTOGRAM BARS
-		for (var i = 0; i < canvasAmount; i++) {
-	        var h = $('#histogram_'+i);
-	        var c = h[0].getContext("2d");
-	        
-	        var start = (i*canvasMaxWidth);
-	        var end = (i < canvasAmount-1) ? (canvasMaxWidth+(i*canvasMaxWidth)) : ((estimatedHistogramWidth - ((canvasAmount-1) * canvasMaxWidth))+(i*canvasMaxWidth)) ;
-	        console.log("start: " + (start) + " \nend: " + (end));
-		    
-		    //console.log(eventRegions.length);
-		    //console.log(eventRegions);
-		    for (var j = 0; j < eventRegions.length; j++) {
-		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
-		            //console.log("canvas_"+ i);
-		            //console.log("within region");
-		    		//console.log(eventRegions[j]);
-		    		//console.log(eventRegions[j][0]);
-		    		//console.log(eventRegions[j][1]);
-		    		//console.log(histValues[j]);
-		    		
-		    		for (var k = 0; k < histValues[j].length; k++) {
-		    			//console.log(histValues[j][k]);
-		    			var x = eventRegions[j][0] + histogramBarSpacing + k * (histogramBarWidth + histogramBarSpacing);
-		    			var width = histogramBarWidth;
-		    			
-		    			//c.fillStyle = '#808080';
-		    			c.fillStyle = 'darkorange';
-		    			//c.fillStyle = (k % 2 === 0) ? 'darkred' : 'orange';
-		    			c.fillRect(x, histogramWrap.height() - heightScale*histValues[j][k], width, heightScale*histValues[j][k]);
-		    		}
-		    		
-		        }
-		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] > end) {
-		            //console.log("canvas_"+ i);
-		            //console.log("partial right region");
-		    		//console.log(eventRegions[j]);
-		    		//console.log(eventRegions[j][0]);
-		    		//console.log((i+1)*canvasMaxWidth);
-		    		//console.log(histValues[j]);
-		    		
-		    		for (var k = 0; k < histValues[j].length; k++) {
-		    			//console.log(histValues[j][k]); 1
-		    			var x = eventRegions[j][0] + histogramBarSpacing + k * (histogramBarWidth + histogramBarSpacing);
-		    			var width = ((x+histogramBarWidth) <= (i+1)*canvasMaxWidth) ? histogramBarWidth : ((i+1)*canvasMaxWidth-x);
-		    			
-		    			if (width > 0) {
-		    				//c.fillStyle = '#808080';
-		    				c.fillStyle = 'darkorange';
-		    				// begin test
-		    				if (width !== histogramBarWidth) {
-		    					c.fillStyle = 'aqua';
-		    				}
-		    				// end test
-		    				//c.fillStyle = (k % 2 === 0) ? 'darkred' : 'orange';
-		    				c.fillRect(x , histogramWrap.height() - heightScale*histValues[j][k], width, heightScale*histValues[j][k]);
-		    			}
-		    		}
-		    		
-		    		/*
-		    		c.fillStyle = 'yellow';
-		    		c.fillRect(18910 , 0, 13856, heightScale*1/2);
-		    		//c.fillRect(18911 , 0, ((histogramBarWidth*6) + 1255), heightScale*1/4);
-		    		*/
-		    		
-		    		/*
-		    		c.fillStyle = 'darkred';
-		    		c.fillRect(18911 , 0, 2100, heightScale*1/4);
-		    		//c.fillRect(18911 , 0, histogramBarWidth, heightScale*1/4);
-		    		
-		    		c.fillStyle = 'darkblue';
-		    		c.fillRect(21012, 0, 2100, heightScale*1/4);
-		    		//c.fillRect((18911 + 2101), 0, 2100, heightScale*1/4);
-		    		
-		    		c.fillStyle = 'darkred';
-		    		c.fillRect(23113, 0, 2100, heightScale*1/4);
-		    		//c.fillRect((18911 + 2101 + 2101), 0, 2100, heightScale*1/4);
-		    		
-		    		c.fillStyle = 'darkblue';
-		    		c.fillRect(25214, 0, 2100, heightScale*1/4);
-		    		//c.fillRect((18911 + 2101 + 2101 + 2101), 0, 2100, heightScale*1/4);
-		    		
-		    		c.fillStyle = 'darkred';
-		    		c.fillRect(27315, 0, 2100, heightScale*1/4);
-		    		//c.fillRect((18911 + 2101 + 2101 + 2101 + 2101), 0, 2100, heightScale*1/4);
-		    		
-		    		c.fillStyle = 'darkblue';
-		    		c.fillRect(29416, 0, 2100, heightScale*1/4);
-		    		//c.fillRect((18911 + 2101 + 2101 + 2101 + 2101 + 2101), 0, 2100, heightScale*1/4);
-		    		
-		    		c.fillStyle = 'darkred';
-		    		c.fillRect(31517, 0, 1249, heightScale*1/4);
-		    		//c.fillRect((18911 + 2101 + 2101 + 2101 + 2101 + 2101 + 2101), 0, 1249, heightScale*1/4);
-		    		*/
-		        }
-		        if (eventRegions[j][0] < start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
-		            console.log("canvas_"+ i);
-		            console.log("partial left region");
-		    		//console.log(eventRegions[j]);
-		    		//console.log(eventRegions[j][0]);
-		    		console.log((i-1)*canvasMaxWidth);
-		    		console.log(eventRegions[j][1]-(i*canvasMaxWidth));
-		    		console.log(histValues[j]);
-		        }
-		    	
-		    }
-		}
 		
 	});
 	
