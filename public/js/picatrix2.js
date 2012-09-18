@@ -88,16 +88,17 @@ $(document).ready(function() {
         *  must be <= CANVAS_MAX_WIDTH */
         
         /*
-	    var hWidth = 100000;
-	    var hSpace = 50000;
-	    */
 	    var hWidth = 20;
 	    var hSpace = 1;
+	    */
+	    
+	    var hWidth = 100000;
+	    var hSpace = 50000;
 	    
 	    var browserWidth = $(window).width();
 	    
-	    var clickIndex = 0;
-	    var mouseIndex = -1;
+	    //var clickIndex = 0;
+	    //var mouseIndex = -1;
 	    
 	    var histValues = [];
 		var maxValue = 0;
@@ -150,39 +151,29 @@ $(document).ready(function() {
 		console.log(canvasAmounts);
 		//console.log(totalEventWidth);
 		
+		
+		// SET HISTOGRAMWRAP WIDTH
 		var histogramWrap = $('#histogramWrap');
 		histogramWrap.css({
 			width : totalEventWidth,
 			height : controlBox.height(),
-			backgroundColor : 'aqua',
 			marginTop : 0,
 			marginRight : 'auto',
 			marginBottom : 0,
-			marginLeft : 'auto'
+			marginLeft : 'auto',
+			backgroundColor : 'aqua'
 		});
 		
-		// APPEND CANVAS TO DOM
+		
+		// APPEND CANVAS(ES) TO HISTOGRAMWRAP
 		var canvasIndex = 0;
 		for (var i = 0; i < canvasAmounts.length; i++) {
 		    var canvasAmount = canvasAmounts[i];
 		    for (var j = 0; j < canvasAmount; j++) {
 		        histogramWrap.append('<canvas id="histogram_'+canvasIndex+'"></canvas>');
-		        canvasIndex++;
-		    }
-		}
-	    
-		var canvasIndex = 0;
-		for (var i = 0; i < canvasAmounts.length; i++) {
-		    var canvasAmount = canvasAmounts[i];
-		    for (var j = 0; j < canvasAmount; j++) {
 		        var h = $('#histogram_'+canvasIndex);
 		        var c = h[0].getContext("2d");
 		        var cWidth = ((j+1) < canvasAmount) ? CANVAS_MAX_WIDTH : (eventWidths[i] - ((canvasAmount-1) * CANVAS_MAX_WIDTH));
-		        
-		        //console.log("j: " + j);
-		        //console.log("canvasIndex: " + canvasIndex);
-		        //console.log("cWidth: " + cWidth);
-		        
 		        h.attr({
 			        width : cWidth,
 			        height : histogramWrap.height()
@@ -190,31 +181,42 @@ $(document).ready(function() {
 	                display : 'block',
 	                float : 'left'
                 });
-                
                 c.fillStyle = (canvasIndex % 2 === 0) ? 'red' : 'blue';
                 c.fillRect(0, 0, cWidth, histogramWrap.height());
-                
 		        canvasIndex++;
 		    }
 		}
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
+		
+		
+		// DRAW/COLOR EVENT REGIONS ON CANVAS(ES)
+		console.log(histValues.length);
+		console.log(histValues[0].length);
+		console.log(histValues[0]);
+		console.log(histValues[1].length);
+		console.log(histValues[1]);
+		for (var i = 0; i < histValues.length; i++) {
+		
+		}
+		
+		
+		
+		
 	    var foo = histValues[0].length;    // assume this is the event length for a particular event.
 		var bar = 0;    // assume this is the width thus far
 		for (var i = 0; i < (2 * foo + 1); i++) {
 		    var start = bar;
+		    
+		    bar += (i % 2 === 0) ? hSpace : hWidth;
+		    
+		    /*
 		    if (i % 2 === 0) {
 		        bar += hSpace;
 		    }
 		    else {
 		        bar += hWidth;
 		    }
+		    */
+		    
 		    var end = bar;
 		    console.log(start + ", " + end +"\n");
 		    
@@ -222,6 +224,7 @@ $(document).ready(function() {
 		    var canvasEndIndex = Math.floor(end/CANVAS_MAX_WIDTH);
 		    console.log("\t" + canvasStartIndex + ", " + canvasEndIndex +"\n");
 		}
+	    
 	    
 	    
 	    
@@ -242,33 +245,11 @@ $(document).ready(function() {
 		//console.log(eventRegions);
 		//console.log(eventWidths);
 		
+		
+		
 		heightScale = histogramWrap.height() / maxValue;
 		
-		// APPEND CANVAS TO DOM
-		for (var i = 0; i < canvasAmount; i++) {
-		    histogramWrap.append('<canvas id="histogram_'+i+'"></canvas>');
-		}
 		
-		// COLOR ALL CANVAS(ES) WHITE
-		for (var i = 0; i < canvasAmount; i++) {
-		    var h = $('#histogram_'+i);
-		    var c = h[0].getContext("2d");
-		    var hWidth = (i < canvasAmount-1) ? CANVAS_MAX_WIDTH : estimatedHistogramWidth - ((canvasAmount-1) * CANVAS_MAX_WIDTH);
-		    
-		    h.attr({
-			    width : hWidth,
-			    height : histogramWrap.height()
-		    }).css({
-	            display : 'block',
-	            float : 'left'
-            });
-            
-            //c.fillStyle = '#FFF';
-            //c.fillStyle = 'aqua';
-            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-	        c.fillStyle = (i % 2 === 0) ? 'red' : 'blue';
-            c.fillRect(0, 0, hWidth, histogramWrap.height());
-		}
 		
 		//console.log(eventRegions);
 		// COLOR EVENT REGION
