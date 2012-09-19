@@ -118,7 +118,7 @@ $(document).ready(function() {
 		}
 		
 		/* delete me testing */
-		histValues = [ [1, 1], [1, 1] ];
+		histValues = [ [1, 1], [1] ];
 		//console.log(histValues);
 		
 		/*
@@ -146,8 +146,11 @@ $(document).ready(function() {
 		    //console.log(eventLength);
 		    //console.log(eventWidth);
 		}
+		console.log("eventLengths: ");
 		console.log(eventLengths);
+		console.log("eventWidths: ");
 		console.log(eventWidths);
+		console.log("canvasAmounts: ");
 		console.log(canvasAmounts);
 		//console.log(totalEventWidth);
 		
@@ -181,7 +184,8 @@ $(document).ready(function() {
 	                display : 'block',
 	                float : 'left'
                 });
-                c.fillStyle = (canvasIndex % 2 === 0) ? 'red' : 'blue';
+                c.fillStyle = '#FFF';
+                //c.fillStyle = (canvasIndex % 2 === 0) ? 'red' : 'blue';
                 c.fillRect(0, 0, cWidth, histogramWrap.height());
 		        canvasIndex++;
 		    }
@@ -189,33 +193,66 @@ $(document).ready(function() {
 		
 		
 		// DRAW/COLOR EVENT REGIONS ON CANVAS(ES)
-		console.log(histValues.length);
-		console.log(histValues[0].length);
-		console.log(histValues[0]);
-		console.log(histValues[1].length);
-		console.log(histValues[1]);
-		for (var i = 0; i < histValues.length; i++) {
-		
+		var canvasStartIndex = 0;
+		var canvasEndIndex = 0;
+		for (var i = 0; i < canvasAmounts.length; i++) {
+		    var canvasAmount = canvasAmounts[i];
+		    canvasEndIndex += canvasAmount;
+		    var _cWidth = 0;
+		    for (var j = canvasStartIndex; j < (canvasEndIndex); j++) {
+		        var h = $('#histogram_'+j);
+		        var c = h[0].getContext("2d");
+		        var cWidth = ((_cWidth+1) < canvasAmount) ? CANVAS_MAX_WIDTH : (eventWidths[i] - ((canvasAmount-1) * CANVAS_MAX_WIDTH));
+		        c.fillStyle = (i % 2 === 0) ? 'red' : 'blue';
+		        c.fillRect(0, 0, cWidth, histogramWrap.height()/2);
+		        _cWidth++;
+		    }
+		    canvasStartIndex += canvasAmount;
 		}
 		
 		
 		
+		//console.log(histValues.length);
+		//console.log(histValues[0].length);
+		//console.log(histValues[0]);
+		//console.log(histValues[1].length);
+		//console.log(histValues[1]);
 		
+		// DRAW/COLOR HISTOGRAM BARS ON CANVAS(ES)
+		/*
+		var bar = 0;
+		for (var i = 0; i < histValues.length; i++) {
+		    for (var j = 0; j < (2 * histValues[i].length + 1); j++) {
+		        var start = bar;
+		        bar += (j % 2 === 0) ? hSpace : hWidth;
+		        var end = bar;
+		        console.log(start + ", " + end +"\n");
+		        
+		        
+		        
+		        var canvasStartIndex = Math.floor(start/CANVAS_MAX_WIDTH);
+		        var canvasEndIndex = Math.floor(end/CANVAS_MAX_WIDTH);
+		        
+		        
+		        
+		        console.log("\t" + canvasStartIndex + ", " + canvasEndIndex +"\n");
+		        
+		    }
+		}
+		*/
+		
+		
+		
+		
+		
+		
+		/*
 	    var foo = histValues[0].length;    // assume this is the event length for a particular event.
 		var bar = 0;    // assume this is the width thus far
 		for (var i = 0; i < (2 * foo + 1); i++) {
 		    var start = bar;
 		    
 		    bar += (i % 2 === 0) ? hSpace : hWidth;
-		    
-		    /*
-		    if (i % 2 === 0) {
-		        bar += hSpace;
-		    }
-		    else {
-		        bar += hWidth;
-		    }
-		    */
 		    
 		    var end = bar;
 		    console.log(start + ", " + end +"\n");
@@ -224,7 +261,7 @@ $(document).ready(function() {
 		    var canvasEndIndex = Math.floor(end/CANVAS_MAX_WIDTH);
 		    console.log("\t" + canvasStartIndex + ", " + canvasEndIndex +"\n");
 		}
-	    
+	    */
 	    
 	    
 	    
