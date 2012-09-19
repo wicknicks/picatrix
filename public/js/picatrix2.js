@@ -88,12 +88,12 @@ $(document).ready(function() {
         *  must be <= CANVAS_MAX_WIDTH */
         
         /*
-	    var hWidth = 20;
-	    var hSpace = 1;
-	    */
-	    
 	    var hWidth = 100000;
 	    var hSpace = 50000;
+	    */
+	    
+	    var hWidth = 20;
+	    var hSpace = 1;
 	    
 	    var browserWidth = $(window).width();
 	    
@@ -193,23 +193,22 @@ $(document).ready(function() {
 		
 		
 		// DRAW/COLOR EVENT REGIONS ON CANVAS(ES)
-		var canvasStartIndex = 0;
-		var canvasEndIndex = 0;
+		var cStart = 0;
+		var cEnd = 0;
 		for (var i = 0; i < canvasAmounts.length; i++) {
 		    var canvasAmount = canvasAmounts[i];
-		    canvasEndIndex += canvasAmount;
+		    cEnd += canvasAmount;
 		    var _cWidth = 0;
-		    for (var j = canvasStartIndex; j < (canvasEndIndex); j++) {
+		    for (var j = cStart; j < cEnd; j++) {
 		        var h = $('#histogram_'+j);
 		        var c = h[0].getContext("2d");
 		        var cWidth = ((_cWidth+1) < canvasAmount) ? CANVAS_MAX_WIDTH : (eventWidths[i] - ((canvasAmount-1) * CANVAS_MAX_WIDTH));
 		        c.fillStyle = (i % 2 === 0) ? 'red' : 'blue';
-		        c.fillRect(0, 0, cWidth, histogramWrap.height()/2);
+		        c.fillRect(0, 0, cWidth, histogramWrap.height() * .90);
 		        _cWidth++;
 		    }
-		    canvasStartIndex += canvasAmount;
+		    cStart += canvasAmount;
 		}
-		
 		
 		
 		//console.log(histValues.length);
@@ -219,7 +218,6 @@ $(document).ready(function() {
 		//console.log(histValues[1]);
 		
 		// DRAW/COLOR HISTOGRAM BARS ON CANVAS(ES)
-		/*
 		var bar = 0;
 		for (var i = 0; i < histValues.length; i++) {
 		    for (var j = 0; j < (2 * histValues[i].length + 1); j++) {
@@ -239,6 +237,7 @@ $(document).ready(function() {
 		        
 		    }
 		}
+		/*
 		*/
 		
 		
