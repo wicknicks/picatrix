@@ -88,12 +88,12 @@ $(document).ready(function() {
         *  must be <= CANVAS_MAX_WIDTH */
         
         /*
-	    var hWidth = 100000;
-	    var hSpace = 50000;
-	    */
-	    
 	    var hWidth = 20;
 	    var hSpace = 1;
+	    */
+	    
+	    var hWidth = 100000;
+	    var hSpace = 50000;
 	    
 	    var browserWidth = $(window).width();
 	    
@@ -211,57 +211,85 @@ $(document).ready(function() {
 		}
 		
 		
-		//console.log(histValues.length);
-		//console.log(histValues[0].length);
-		//console.log(histValues[0]);
-		//console.log(histValues[1].length);
-		//console.log(histValues[1]);
 		
-		// DRAW/COLOR HISTOGRAM BARS ON CANVAS(ES)
-		var bar = 0;
-		for (var i = 0; i < histValues.length; i++) {
-		    for (var j = 0; j < (2 * histValues[i].length + 1); j++) {
-		        var start = bar;
-		        bar += (j % 2 === 0) ? hSpace : hWidth;
-		        var end = bar;
-		        console.log(start + ", " + end +"\n");
-		        
-		        
-		        
-		        var canvasStartIndex = Math.floor(start/CANVAS_MAX_WIDTH);
-		        var canvasEndIndex = Math.floor(end/CANVAS_MAX_WIDTH);
-		        
-		        
-		        
-		        console.log("\t" + canvasStartIndex + ", " + canvasEndIndex +"\n");
-		        
-		    }
-		}
+		
 		/*
 		*/
-		
-		
-		
-		
-		
-		
-		/*
-	    var foo = histValues[0].length;    // assume this is the event length for a particular event.
-		var bar = 0;    // assume this is the width thus far
-		for (var i = 0; i < (2 * foo + 1); i++) {
-		    var start = bar;
+		// DRAW/COLOR HISTOGRAM BARS ON CANVAS(ES)
+		// SAVE THIS BECAUSE WE WILL NEED IT TO DRAW THE HISTOGRAM BARS
+		var eStart = 0;
+		var eEnd = 0;
+		for (var i = 0; i < histValues.length; i++) {
+		    var hBar = 0;
+		    var canvasAmount = canvasAmounts[i];
+		    eEnd += canvasAmount;
 		    
-		    bar += (i % 2 === 0) ? hSpace : hWidth;
+		    //console.log("event_"+i + " spans from canvas_" + eStart + " to canvas_" + (eEnd-1) + ", has " + eventLengths[i] + " histogram bar(s), and has a width of " + eventWidths[i] + "px");
 		    
-		    var end = bar;
-		    console.log(start + ", " + end +"\n");
-		    
-		    var canvasStartIndex = Math.floor(start/CANVAS_MAX_WIDTH);
-		    var canvasEndIndex = Math.floor(end/CANVAS_MAX_WIDTH);
-		    console.log("\t" + canvasStartIndex + ", " + canvasEndIndex +"\n");
+		    var hBarIndex = 0;
+		    for (var j = 0; j < (2 * histValues[i].length + 1); j++) {
+		        var _hBarStart = hBar;
+		        hBar += (j % 2 === 0) ? hSpace : hWidth;
+		        var _hBarEnd = hBar;
+		        if (j % 2 !== 0) {
+		            var hBarStart = Math.floor(eStart+(_hBarStart/CANVAS_MAX_WIDTH));
+		            var hBarEnd = Math.floor(eStart+(_hBarEnd/CANVAS_MAX_WIDTH));
+		            
+		            
+		            var fooboo = Math.floor(_hBarStart/CANVAS_MAX_WIDTH);
+		            var barbaz = Math.floor(_hBarEnd/CANVAS_MAX_WIDTH);
+		            
+		            //console.log(_hBarStart + " _ " + _hBarEnd);
+		            //console.log(fooboo + " - " + barbaz);
+		            
+		            console.log("histogrambar_"+hBarIndex + " of event_"+i + " spans from canvas_"+ hBarStart + " to canvas_" + hBarEnd);
+		            
+		            if (hBarStart === hBarEnd) {
+		                //console.log("histogrambar_"+hBarIndex + " fits in a single <canvas> element");
+		            }
+		            else {
+		                //console.log("histogrambar_"+hBarIndex + " fits in multiple <canvas> elements");
+		                
+		                
+		                for (var k = hBarStart; k <= hBarEnd; k++) {
+		                    var h = $('#histogram_'+k);
+		                    var c = h[0].getContext("2d");
+		                    c.fillStyle = 'aqua';
+		                    
+		                    if (k === hBarStart) {
+		                        var w = ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart);
+		                        var xpos = CANVAS_MAX_WIDTH - w;
+		                        
+		                        //console.log("width: " + w);
+		                        //console.log("xpos: " + xpos);
+		                        console.log("$('#histogram_"+k+"').fillRect("+xpos+", 0, "+w+", histogramWrap.height() * .80);");
+		                        c.fillRect(xpos, 0, w, histogramWrap.height() * .80);
+		                        
+		                    }
+		                    else if (k === hBarEnd) {
+		                        var w = (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart));
+		                        
+		                        //console.log("width: " + w);
+		                        console.log("$('#histogram_"+k+"').fillRect(0, 0, "+w+", histogramWrap.height() * .80);");
+		                        c.fillRect(0, 0, w, histogramWrap.height() * .80);
+		                        
+		                    }
+		                    else {
+		                        console.log("$('#histogram_"+k+"').fillRect(0, 0, 32766, histogramWrap.height() * .80);");
+		                        c.fillRect(0, 0, CANVAS_MAX_WIDTH, histogramWrap.height() * .80);
+		                    }
+		                    
+		                }
+		                
+		            }
+		            
+		            hBarIndex++;
+		        }
+		    }
+		    eStart += canvasAmount;
 		}
-	    */
-	    
+		
+		
 	    
 	    
 	    /*
