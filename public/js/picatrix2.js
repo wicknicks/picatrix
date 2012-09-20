@@ -32,7 +32,7 @@ $(document).ready(function() {
 	if ($('[name=q]').val().length === 0) {
 	}
 	*/
-	$('[name=q]').val('trip');
+	$('[name=q]').val('summer');
 	
 	var searcher = new Searcher();
 	searcher.keysearch($('[name=q]').val(), function(events) {
@@ -88,7 +88,7 @@ $(document).ready(function() {
 	    var hSpace = 50000;
 	    */
 	    var hWidth = 20;
-	    var hSpace = 4;
+	    var hSpace = 1;
 	    
 	    var browserWidth = $(window).width();
 	    
@@ -152,6 +152,9 @@ $(document).ready(function() {
 			marginLeft : 'auto',
 			backgroundColor : 'aqua'
 		});
+		
+		// REMOVE ANY CANVAS(ES)
+		histogramWrap.empty();
 		
 		
 		// APPEND CANVAS(ES) TO HISTOGRAMWRAP
