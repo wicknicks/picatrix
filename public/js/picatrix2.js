@@ -32,7 +32,7 @@ $(document).ready(function() {
 	if ($('[name=q]').val().length === 0) {
 	}
 	*/
-	$('[name=q]').val('ted');
+	$('[name=q]').val('trip');
 	
 	var searcher = new Searcher();
 	searcher.keysearch($('[name=q]').val(), function(events) {
@@ -83,17 +83,12 @@ $(document).ready(function() {
         
         var CANVAS_MAX_WIDTH = 32766; //(2^15)-2
         
-        /* for simplicity and practicality, 
-        *  hSpace + (2 * hSpace)
-        *  must be <= CANVAS_MAX_WIDTH */
-        
         /*
 	    var hWidth = 100000;
 	    var hSpace = 50000;
 	    */
-	    
 	    var hWidth = 20;
-	    var hSpace = 1;
+	    var hSpace = 4;
 	    
 	    var browserWidth = $(window).width();
 	    
@@ -116,20 +111,8 @@ $(document).ready(function() {
             }
 		    histValues.push(values);
 		}
-		
-		/* delete me testing */
-		histValues = [ [1, 1], [1] ];
-		//console.log(histValues);
-		
-		/*
-		query = ted
-		histValues = [ [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1] ]
-		histValues.length = 2
-		histValues[0] = [1, 1, 1, 1, 1, 1, 1, 1, 1]
-		histValues[0].length = 9
-		histValues[1] = [1, 1, 1, 1, 1, 1, 1]
-		histValues[1].length = 7
-		*/
+		//console.log("maxValue: ");
+		//console.log(maxValue);
 		
 		var eventLengths = [];
 		var eventWidths = [];
@@ -146,13 +129,16 @@ $(document).ready(function() {
 		    //console.log(eventLength);
 		    //console.log(eventWidth);
 		}
-		console.log("eventLengths: ");
-		console.log(eventLengths);
-		console.log("eventWidths: ");
-		console.log(eventWidths);
-		console.log("canvasAmounts: ");
-		console.log(canvasAmounts);
+		//console.log("eventLengths: ");
+		//console.log(eventLengths);
+		//console.log("eventWidths: ");
+		//console.log(eventWidths);
+		//console.log("canvasAmounts: ");
+		//console.log(canvasAmounts);
+		//console.log("totalEventWidth: ");
 		//console.log(totalEventWidth);
+		console.log("histValues: ");
+		console.log(histValues);
 		
 		
 		// SET HISTOGRAMWRAP WIDTH
@@ -203,18 +189,17 @@ $(document).ready(function() {
 		        var h = $('#histogram_'+j);
 		        var c = h[0].getContext("2d");
 		        var cWidth = ((_cWidth+1) < canvasAmount) ? CANVAS_MAX_WIDTH : (eventWidths[i] - ((canvasAmount-1) * CANVAS_MAX_WIDTH));
-		        c.fillStyle = (i % 2 === 0) ? 'red' : 'blue';
-		        c.fillRect(0, 0, cWidth, histogramWrap.height() * .90);
+		        c.fillStyle = (i % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
+		        c.fillRect(0, 0, cWidth, histogramWrap.height());
 		        _cWidth++;
 		    }
 		    cStart += canvasAmount;
 		}
 		
 		
-		
-		
 		// DRAW/COLOR HISTOGRAM BARS ON CANVAS(ES)
 		// SAVE THIS BECAUSE WE WILL NEED IT TO DRAW THE HISTOGRAM BARS
+		var heightScale = histogramWrap.height() / maxValue;
 		var eStart = 0;
 		var eEnd = 0;
 		for (var i = 0; i < histValues.length; i++) {
@@ -237,15 +222,13 @@ $(document).ready(function() {
 		            var fooboo = Math.floor(_hBarStart/CANVAS_MAX_WIDTH);
 		            var barbaz = Math.floor(_hBarEnd/CANVAS_MAX_WIDTH);
 		            //console.log(fooboo + " - " + barbaz);
-		            
 		            //console.log("histogrambar_"+hBarIndex + " of event_"+i + " spans from canvas_"+ hBarStart + " to canvas_" + hBarEnd);
-		            
 		            if (hBarStart === hBarEnd) {
 		                //console.log("histogrambar_"+hBarIndex + " fits in a single <canvas> element");
 		                var h = $('#histogram_'+hBarStart);
 		                var c = h[0].getContext("2d");
-		                c.fillStyle = 'aqua';
-		                c.fillRect(_hBarStart, 0, hWidth, histogramWrap.height() * .80);
+		                c.fillStyle = '#0033CC';
+		                c.fillRect(_hBarStart, 0, hWidth, histValues[i][hBarIndex]*heightScale);
 		                
 		            }
 		            else {
@@ -253,27 +236,26 @@ $(document).ready(function() {
 		                for (var k = hBarStart; k <= hBarEnd; k++) {
 		                    var h = $('#histogram_'+k);
 		                    var c = h[0].getContext("2d");
-		                    c.fillStyle = 'aqua';
+		                    c.fillStyle = '#0033CC';
 		                    if (k === hBarStart) {
-		                        c.fillRect((CANVAS_MAX_WIDTH - ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart)), 0, ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart), histogramWrap.height() * .80);
+		                        c.fillRect((CANVAS_MAX_WIDTH - ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart)), 0, ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart), histValues[i][hBarIndex]*heightScale);
 		                        
 		                    }
 		                    else if (k === hBarEnd) {
-		                        c.fillRect(0, 0, (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - (((fooboo+1) * CANVAS_MAX_WIDTH) - _hBarStart)), histogramWrap.height() * .80);
+		                        c.fillRect(0, 0, (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - (((fooboo+1) * CANVAS_MAX_WIDTH) - _hBarStart)), histValues[i][hBarIndex]*heightScale);
 		                        
 		                    }
 		                    else {
-		                        c.fillRect(0, 0, CANVAS_MAX_WIDTH, histogramWrap.height() * .80);
+		                        c.fillRect(0, 0, CANVAS_MAX_WIDTH, histValues[i][hBarIndex]*heightScale);
 		                    }
 		                }
-		                
 		            }
-		            
 		            hBarIndex++;
 		        }
 		    }
 		    eStart += canvasAmount;
 		}
+		
 		
 		/*
 		// TESTING MUTLIPLE CANVAS HISTOGRAM BAR DRAWING
@@ -290,6 +272,7 @@ $(document).ready(function() {
 		cc1.fillStyle = '#808080';
 		cc1.fillRect(1, 0, 20, 100);
 		*/
+		
 		
 		/*
 		// TESTING MUTLIPLE CANVAS HISTOGRAM BAR DRAWING
@@ -314,7 +297,6 @@ $(document).ready(function() {
 		cont4.fillRect(0, 0, 18936, 100);
 		
 		
-		
 		var hist6 = $('#histogram_6');
 		var cont6 = hist6[0].getContext("2d");
 		cont6.fillStyle = 'aqua';
@@ -336,7 +318,6 @@ $(document).ready(function() {
 		cont9.fillRect(0, 0, 5106, 100);
 	    
 	    
-	    
 		var hist12 = $('#histogram_12');
 		var cont12 = hist12[0].getContext("2d");
 		cont12.fillStyle = 'aqua';
@@ -356,74 +337,6 @@ $(document).ready(function() {
 		var cont15 = hist15[0].getContext("2d");
 		cont15.fillStyle = 'purple';
 		cont15.fillRect(0, 0, 18936, 100);
-		*/
-		
-		
-		
-		
-		
-	    
-	    /*
-		var eventRegions = [];
-		var xCoord = 0;
-		var canvasAmount = 0;
-		var estimatedHistogramWidth = 0;
-		var heightScale = 0;
-		for (var i = 0; i < events.arr.length; i++) {
-            var w = (values.length * hWidth + (values.length + 1) * hSpace);
-            eventWidths.push(w);
-            estimatedHistogramWidth += w;
-		    eventRegions.push([xCoord, w+xCoord]);
-	        xCoord += w;
-		    histValues.push(values);
-		}
-		//console.log(eventRegions);
-		//console.log(eventWidths);
-		
-		
-		
-		heightScale = histogramWrap.height() / maxValue;
-		
-		
-		
-		//console.log(eventRegions);
-		// COLOR EVENT REGION
-		for (var i = 0; i < canvasAmount; i++) {
-	        var h = $('#histogram_'+i);
-	        var c = h[0].getContext("2d");
-	        
-	        var start = (i*CANVAS_MAX_WIDTH);
-	        var end = (i < canvasAmount-1) ? (CANVAS_MAX_WIDTH+(i*CANVAS_MAX_WIDTH)) : ((estimatedHistogramWidth - ((canvasAmount-1) * CANVAS_MAX_WIDTH))+(i*CANVAS_MAX_WIDTH)) ;
-	        //console.log("start: " + (start) + " \nend: " + (end));
-	        
-		    //console.log(eventRegions);
-		    for (var j = 0; j < eventRegions.length; j++) {
-		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
-		            //console.log("i: "+ i);
-		            //console.log(eventRegions[j]);
-		            var x = (eventRegions[j][0]-(i*CANVAS_MAX_WIDTH));
-		            var width = (eventRegions[j][1]-(i*CANVAS_MAX_WIDTH))-x;
-		            //c.fillStyle = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
-		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            c.fillRect(x, 0, width, histogramWrap.height()/2);
-		        }
-		        if (eventRegions[j][0] >= start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] > end) {
-		            var x = (eventRegions[j][0]-(i*CANVAS_MAX_WIDTH));
-		            var width = ((i+1)*CANVAS_MAX_WIDTH)-x;
-		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
-		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            c.fillRect(x, 0, width, histogramWrap.height()/2);
-		        }
-		        if (eventRegions[j][0] < start && eventRegions[j][1] >= start && eventRegions[j][0] <= end && eventRegions[j][1] <= end) {
-		            var x = 0;
-		            var width = (eventRegions[j][1]-(i*CANVAS_MAX_WIDTH));
-		            //c.fillStyle = (j % 2 === 0) ? '#E6E6E6' : '#CFCFCF';
-		            c.fillStyle = (j % 2 === 0) ? 'green' : 'purple';
-		            c.fillRect(x, 0, width, histogramWrap.height()/2);
-		        }
-		    }
-		}
 		*/
     }
 	
