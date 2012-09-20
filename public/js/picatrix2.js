@@ -88,12 +88,12 @@ $(document).ready(function() {
         *  must be <= CANVAS_MAX_WIDTH */
         
         /*
-	    var hWidth = 20;
-	    var hSpace = 1;
-	    */
-	    
 	    var hWidth = 100000;
 	    var hSpace = 50000;
+	    */
+	    
+	    var hWidth = 20;
+	    var hSpace = 1;
 	    
 	    var browserWidth = $(window).width();
 	    
@@ -232,45 +232,37 @@ $(document).ready(function() {
 		        if (j % 2 !== 0) {
 		            var hBarStart = Math.floor(eStart+(_hBarStart/CANVAS_MAX_WIDTH));
 		            var hBarEnd = Math.floor(eStart+(_hBarEnd/CANVAS_MAX_WIDTH));
-		            
+		            //console.log(_hBarStart + " _ " + _hBarEnd);
 		            
 		            var fooboo = Math.floor(_hBarStart/CANVAS_MAX_WIDTH);
 		            var barbaz = Math.floor(_hBarEnd/CANVAS_MAX_WIDTH);
-		            
-		            //console.log(_hBarStart + " _ " + _hBarEnd);
 		            //console.log(fooboo + " - " + barbaz);
 		            
-		            console.log("histogrambar_"+hBarIndex + " of event_"+i + " spans from canvas_"+ hBarStart + " to canvas_" + hBarEnd);
+		            //console.log("histogrambar_"+hBarIndex + " of event_"+i + " spans from canvas_"+ hBarStart + " to canvas_" + hBarEnd);
 		            
 		            if (hBarStart === hBarEnd) {
 		                //console.log("histogrambar_"+hBarIndex + " fits in a single <canvas> element");
-		                // NEED TO DO
+		                var h = $('#histogram_'+hBarStart);
+		                var c = h[0].getContext("2d");
+		                c.fillStyle = 'aqua';
+		                c.fillRect(_hBarStart, 0, hWidth, histogramWrap.height() * .80);
+		                
 		            }
 		            else {
 		                //console.log("histogrambar_"+hBarIndex + " fits in multiple <canvas> elements");
 		                for (var k = hBarStart; k <= hBarEnd; k++) {
-		                    var _h = '#histogram_'+k;
 		                    var h = $('#histogram_'+k);
 		                    var c = h[0].getContext("2d");
 		                    c.fillStyle = 'aqua';
 		                    if (k === hBarStart) {
-		                        var w = ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart);
-		                        var xpos = CANVAS_MAX_WIDTH - w;
-		                        //console.log("width: " + w);
-		                        //console.log("xpos: " + xpos);
-		                        //console.log("$('"+_h+"').fillRect("+xpos+", 0, "+w+", histogramWrap.height() * .80);");
-		                        c.fillRect(xpos, 0, w, histogramWrap.height() * .80);
+		                        c.fillRect((CANVAS_MAX_WIDTH - ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart)), 0, ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart), histogramWrap.height() * .80);
 		                        
 		                    }
 		                    else if (k === hBarEnd) {
-		                        var w = (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - (((fooboo+1) * CANVAS_MAX_WIDTH) - _hBarStart));
-		                        //console.log("width: " + w);
-		                        //console.log("$('"+_h+"').fillRect(0, 0, "+w+", histogramWrap.height() * .80);");
-		                        c.fillRect(0, 0, w, histogramWrap.height() * .80);
+		                        c.fillRect(0, 0, (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - (((fooboo+1) * CANVAS_MAX_WIDTH) - _hBarStart)), histogramWrap.height() * .80);
 		                        
 		                    }
 		                    else {
-		                        //console.log("$('" + _h + "').fillRect(0, 0, "+ CANVAS_MAX_WIDTH +", histogramWrap.height() * .80);");
 		                        c.fillRect(0, 0, CANVAS_MAX_WIDTH, histogramWrap.height() * .80);
 		                    }
 		                }
@@ -282,6 +274,22 @@ $(document).ready(function() {
 		    }
 		    eStart += canvasAmount;
 		}
+		
+		/*
+		// TESTING MUTLIPLE CANVAS HISTOGRAM BAR DRAWING
+		var hh0 = $('#histogram_0');
+		var cc0 = hh0[0].getContext("2d");
+		
+		cc0.fillStyle = '#808080';
+		cc0.fillRect(1, 0, 20, 100);
+		
+		cc0.fillRect(22, 0, 20, 100);
+		
+		var hh1 = $('#histogram_1');
+		var cc1 = hh1[0].getContext("2d");
+		cc1.fillStyle = '#808080';
+		cc1.fillRect(1, 0, 20, 100);
+		*/
 		
 		/*
 		// TESTING MUTLIPLE CANVAS HISTOGRAM BAR DRAWING
