@@ -156,6 +156,7 @@ $(document).ready(function() {
 		// REMOVE ANY CANVAS(ES)
 		histogramWrap.empty();
 		
+		// adding some random comment
 		
 		// APPEND CANVAS(ES) TO HISTOGRAMWRAP
 		var canvasIndex = 0;
