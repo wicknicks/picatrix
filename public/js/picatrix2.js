@@ -213,8 +213,6 @@ $(document).ready(function() {
 		
 		
 		
-		/*
-		*/
 		// DRAW/COLOR HISTOGRAM BARS ON CANVAS(ES)
 		// SAVE THIS BECAUSE WE WILL NEED IT TO DRAW THE HISTOGRAM BARS
 		var eStart = 0;
@@ -246,39 +244,35 @@ $(document).ready(function() {
 		            
 		            if (hBarStart === hBarEnd) {
 		                //console.log("histogrambar_"+hBarIndex + " fits in a single <canvas> element");
+		                // NEED TO DO
 		            }
 		            else {
 		                //console.log("histogrambar_"+hBarIndex + " fits in multiple <canvas> elements");
-		                
-		                
 		                for (var k = hBarStart; k <= hBarEnd; k++) {
+		                    var _h = '#histogram_'+k;
 		                    var h = $('#histogram_'+k);
 		                    var c = h[0].getContext("2d");
 		                    c.fillStyle = 'aqua';
-		                    
 		                    if (k === hBarStart) {
 		                        var w = ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart);
 		                        var xpos = CANVAS_MAX_WIDTH - w;
-		                        
 		                        //console.log("width: " + w);
 		                        //console.log("xpos: " + xpos);
-		                        console.log("$('#histogram_"+k+"').fillRect("+xpos+", 0, "+w+", histogramWrap.height() * .80);");
+		                        //console.log("$('"+_h+"').fillRect("+xpos+", 0, "+w+", histogramWrap.height() * .80);");
 		                        c.fillRect(xpos, 0, w, histogramWrap.height() * .80);
 		                        
 		                    }
 		                    else if (k === hBarEnd) {
-		                        var w = (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart));
-		                        
+		                        var w = (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - (((fooboo+1) * CANVAS_MAX_WIDTH) - _hBarStart));
 		                        //console.log("width: " + w);
-		                        console.log("$('#histogram_"+k+"').fillRect(0, 0, "+w+", histogramWrap.height() * .80);");
+		                        //console.log("$('"+_h+"').fillRect(0, 0, "+w+", histogramWrap.height() * .80);");
 		                        c.fillRect(0, 0, w, histogramWrap.height() * .80);
 		                        
 		                    }
 		                    else {
-		                        console.log("$('#histogram_"+k+"').fillRect(0, 0, 32766, histogramWrap.height() * .80);");
+		                        //console.log("$('" + _h + "').fillRect(0, 0, "+ CANVAS_MAX_WIDTH +", histogramWrap.height() * .80);");
 		                        c.fillRect(0, 0, CANVAS_MAX_WIDTH, histogramWrap.height() * .80);
 		                    }
-		                    
 		                }
 		                
 		            }
@@ -289,8 +283,77 @@ $(document).ready(function() {
 		    eStart += canvasAmount;
 		}
 		
+		/*
+		// TESTING MUTLIPLE CANVAS HISTOGRAM BAR DRAWING
+		var hist1 = $('#histogram_1');
+		var cont1 = hist1[0].getContext("2d");
+		cont1.fillStyle = 'aqua';
+		cont1.fillRect(17234, 0, 15532, 100);
 		
+		var hist2 = $('#histogram_2');
+		var cont2 = hist2[0].getContext("2d");
+		cont2.fillStyle = 'orange';
+		cont2.fillRect(0, 0, 32766, 100);
+		
+		var hist3 = $('#histogram_3');
+		var cont3 = hist3[0].getContext("2d");
+		cont3.fillStyle = 'green';
+		cont3.fillRect(0, 0, 32766, 100);
+		
+		var hist4 = $('#histogram_4');
+		var cont4 = hist4[0].getContext("2d");
+		cont4.fillStyle = 'purple';
+		cont4.fillRect(0, 0, 18936, 100);
+		
+		
+		
+		var hist6 = $('#histogram_6');
+		var cont6 = hist6[0].getContext("2d");
+		cont6.fillStyle = 'aqua';
+		cont6.fillRect(3404, 0, 29362, 100);
+		
+		var hist7 = $('#histogram_7');
+		var cont7 = hist7[0].getContext("2d");
+		cont7.fillStyle = 'orange';
+		cont7.fillRect(0, 0, 32766, 100);
+		
+		var hist8 = $('#histogram_8');
+		var cont8 = hist8[0].getContext("2d");
+		cont8.fillStyle = 'green';
+		cont8.fillRect(0, 0, 32766, 100);
+		
+		var hist9 = $('#histogram_9');
+		var cont9 = hist9[0].getContext("2d");
+		cont9.fillStyle = 'purple';
+		cont9.fillRect(0, 0, 5106, 100);
 	    
+	    
+	    
+		var hist12 = $('#histogram_12');
+		var cont12 = hist12[0].getContext("2d");
+		cont12.fillStyle = 'aqua';
+		cont12.fillRect(17234, 0, 15532, 100);
+		
+		var hist13 = $('#histogram_13');
+		var cont13 = hist13[0].getContext("2d");
+		cont13.fillStyle = 'orange';
+		cont13.fillRect(0, 0, 32766, 100);
+		
+		var hist14 = $('#histogram_14');
+		var cont14 = hist14[0].getContext("2d");
+		cont14.fillStyle = 'green';
+		cont14.fillRect(0, 0, 32766, 100);
+		
+		var hist15 = $('#histogram_15');
+		var cont15 = hist15[0].getContext("2d");
+		cont15.fillStyle = 'purple';
+		cont15.fillRect(0, 0, 18936, 100);
+		*/
+		
+		
+		
+		
+		
 	    
 	    /*
 		var eventRegions = [];
