@@ -32,7 +32,7 @@ $(document).ready(function() {
 	if ($('[name=q]').val().length === 0) {
 	}
 	*/
-	$('[name=q]').val('summer');
+	$('[name=q]').val('ny');
 	
 	var searcher = new Searcher();
 	searcher.keysearch($('[name=q]').val(), function(events) {
@@ -71,8 +71,9 @@ $(document).ready(function() {
 	    
 	    var controlBox = $('#controlBox');
 	    controlBox.css({
-		    overflowX: 'scroll',
-		    overflowY: 'scroll',
+	        position: 'relative',
+		    overflowX: 'scroll', //hidden //scroll
+		    overflowY: 'scroll', //hidden //scroll
 		    width : $(window).width(),
 		    height : $(window).height() - searchBox.height() - viewBox.height(),
 		    minHeight : 100,
@@ -144,19 +145,42 @@ $(document).ready(function() {
 		// SET HISTOGRAMWRAP WIDTH
 		var histogramWrap = $('#histogramWrap');
 		histogramWrap.css({
-			width : totalEventWidth,
-			height : controlBox.height(),
-			marginTop : 0,
-			marginRight : 'auto',
-			marginBottom : 0,
-			marginLeft : 'auto',
-			backgroundColor : 'aqua'
+		    width : "",
+		    height : "",
+		    marginTop : "",
+		    marginRight : "",
+		    marginBottom : "",
+		    marginLeft : "",
+		    position : "",
+		    top : "",
+		    left : ""
 		});
+		histogramWrap.css({
+			width : totalEventWidth,
+			height : controlBox.height()
+		});
+		if (histogramWrap.width() <= controlBox.width()) {
+		    histogramWrap.css({
+			    marginTop : 0,
+			    marginRight : 'auto',
+			    marginBottom : 0,
+			    marginLeft : 'auto'
+		    });
+		}
+		else {
+		    histogramWrap.css({
+			    position : 'absolute',
+			    top : 0,
+			    left : 0
+		    });
+		}
 		
-		// REMOVE ANY CANVAS(ES)
+		// REMOVE ANY PREVIOUS CANVAS(ES) AND CAROUSEL BUTTONS
 		histogramWrap.empty();
+		$('#controlBox #carousel_left_arrow').remove();
+		$('#controlBox #carousel_right_arrow').remove();
 		
-		// adding some random comment
+		
 		
 		// APPEND CANVAS(ES) TO HISTOGRAMWRAP
 		var canvasIndex = 0;
@@ -342,7 +366,30 @@ $(document).ready(function() {
 		cont15.fillStyle = 'purple';
 		cont15.fillRect(0, 0, 18936, 100);
 		*/
+		
+		// ADD CAROUSEL BUTTONS IF HISTOGRAM IS LONGER THAN BROWSER WIDTH
+		if (histogramWrap.width() > controlBox.width()) {
+		    controlBox.append('<img id="carousel_left_arrow" src="img/carousel_left_arrow.png" width="53" height="52" /><img id="carousel_right_arrow" src="img/carousel_right_arrow.png" width="53" height="52" />');
+		    $('#carousel_left_arrow').css({
+		        position: 'absolute',
+		        top: ((histogramWrap.height() - carousel_left_arrow.height)/2),
+		        left: 0
+		    });
+		    $('#carousel_right_arrow').css({
+		        position: 'absolute',
+		        top: ((histogramWrap.height() - carousel_right_arrow.height)/2),
+		        right: 0
+		    });
+		    $('#carousel_left_arrow').click(function() {
+		        alert("scroll to left");
+		    });
+		    $('#carousel_right_arrow').click(function() {
+		        alert("scroll to right");
+		        //histogramWrap.animate();
+		    
+		    });
+		}
+		
     }
-	
 });
 
