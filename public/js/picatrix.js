@@ -9,7 +9,7 @@ $(document).ready(function() {
 		+ '<span style="visibility:hidden">&nbsp;</span>'
 	+ '</form>'
 	+ '<div id="viewBox">'
-	    + 'click to test'
+	    //+ 'click to test'
         + '<!--'
 		+ '<ul id="viewGallery">'
 		+ '<li><img src="img/city_1.jpg" alt="" /></li>'
@@ -34,14 +34,11 @@ $(document).ready(function() {
 	$('[name=query]').val(sessionStorage.query);
 	// END DYNAMIC SITE CREATION
 	
-	// BEGIN
 	var searcher = new Searcher();
 	searcher.keysearch(sessionStorage.query, function(events) {
 	    drawHistogram(events);
 	});
-	// END
 	
-	// BEGIN FORM SUBMIT EVENT HANDLER
 	$('#searchBox').submit(function(event) {
 		event.preventDefault();
 		sessionStorage.query = $('[name=query]').val();
@@ -49,20 +46,19 @@ $(document).ready(function() {
 	        drawHistogram(events);
 	    });
 	});
-	// END FORM SUBMIT EVENT HANDLER
 	
-	// BEGIN WINDOW RESIZE EVENT HANDLER
 	$(window).resize(function(event) {
 	    searcher.keysearch(sessionStorage.query, function(events) {
 	        drawHistogram(events);
 	    });
 	});
-	// END WINDOW RESIZE EVENT HANDLER
 	
 	// BEGIN TEST
+	/*
 	$('#viewBox').click(function(event) {
 		alert(sessionStorage.query);
 	});
+	*/
 	// END TEST
 	
     function drawHistogram(events) {
@@ -84,7 +80,7 @@ $(document).ready(function() {
 	    
 	    var controlBox = $('#controlBox');
 	    controlBox.css({
-		    overflowX: 'scroll',
+		    overflowX: 'hidden',
 		    overflowY: 'hidden',
 		    width: $(window).width(),
 		    height: $(window).height() - searchBox.height() - viewBox.height(),
@@ -96,8 +92,9 @@ $(document).ready(function() {
         
         var CANVAS_MAX_WIDTH = 32766; //(2^15)-2
         
-	    var hWidth = 20;
+	    var hWidth = 16;
 	    var hSpace = 1;
+	    
 	    
 	    var browserWidth = $(window).width();
 	    
@@ -138,15 +135,13 @@ $(document).ready(function() {
 		var histogramWrap = $('#histogramWrap');
 		histogramWrap.css({
 			width : totalEventWidth,
-			height : controlBox.height(),
-			marginTop : 0,
-			marginRight : 'auto',
-			marginBottom : 0,
-			marginLeft : 'auto'
+			height : controlBox.height()
 		});
 		
-		// REMOVE ANY CANVAS(ES)
+		// REMOVE ANY CANVAS(ES) AND ARROWS
 		histogramWrap.empty();
+		$('#carousel_left_arrow').remove();
+		$('#carousel_right_arrow').remove();
 		
 		// APPEND CANVAS(ES) TO HISTOGRAMWRAP
 		var canvasIndex = 0;
@@ -212,7 +207,7 @@ $(document).ready(function() {
 		                var h = $('#histogram_'+hBarStart);
 		                var c = h[0].getContext("2d");
 		                c.fillStyle = '#0033CC';
-		                c.fillRect(_hBarStart, 0, hWidth, histValues[i][hBarIndex]*heightScale);
+		                c.fillRect(_hBarStart, histogramWrap.height() - histValues[i][hBarIndex]*heightScale, hWidth, histValues[i][hBarIndex]*heightScale);
 		                
 		            }
 		            else {
@@ -221,15 +216,15 @@ $(document).ready(function() {
 		                    var c = h[0].getContext("2d");
 		                    c.fillStyle = '#0033CC';
 		                    if (k === hBarStart) {
-		                        c.fillRect((CANVAS_MAX_WIDTH - ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart)), 0, ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart), histValues[i][hBarIndex]*heightScale);
+		                        c.fillRect((CANVAS_MAX_WIDTH - ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart)), histogramWrap.height() - histValues[i][hBarIndex]*heightScale, ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart), histValues[i][hBarIndex]*heightScale);
 		                        
 		                    }
 		                    else if (k === hBarEnd) {
-		                        c.fillRect(0, 0, (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - (((fooboo+1) * CANVAS_MAX_WIDTH) - _hBarStart)), histValues[i][hBarIndex]*heightScale);
+		                        c.fillRect(0, histogramWrap.height() - histValues[i][hBarIndex]*heightScale, (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - (((fooboo+1) * CANVAS_MAX_WIDTH) - _hBarStart)), histValues[i][hBarIndex]*heightScale);
 		                        
 		                    }
 		                    else {
-		                        c.fillRect(0, 0, CANVAS_MAX_WIDTH, histValues[i][hBarIndex]*heightScale);
+		                        c.fillRect(0, histogramWrap.height() - histValues[i][hBarIndex]*heightScale, CANVAS_MAX_WIDTH, histValues[i][hBarIndex]*heightScale);
 		                    }
 		                }
 		            }
@@ -238,5 +233,69 @@ $(document).ready(function() {
 		    }
 		    eStart += canvasAmount;
 		}
+		
+		
+		if (histogramWrap.width() <= controlBox.width()) {
+		    controlBox.css({
+		        position: 'static'
+		    });
+		    histogramWrap.css({
+		        position: 'static',
+		        top: 'auto',
+		        left: 'auto',
+		        bottom: 'auto',
+		        right: 'auto',
+			    marginTop: 0,
+			    marginRight: 'auto',
+			    marginBottom: 0,
+			    marginLeft: 'auto'
+		    });
+		}
+		else {
+		    controlBox.css({
+		        position: 'relative'
+		    });
+		    histogramWrap.css({
+		        position: 'absolute',
+		        top: 0,
+		        left: 0,
+		        //left: SESSION VALUE TO SAVE STATE,
+		        bottom: 'auto',
+		        right: 'auto',
+			    marginTop: 0,
+			    marginRight: 0,
+			    marginBottom: 0,
+			    marginLeft: 0
+		    });
+		    controlBox.append('<img id="carousel_left_arrow" src="img/carousel_left_arrow.png" width="53" height="52" /><img id="carousel_right_arrow" src="img/carousel_right_arrow.png" width="53" height="52" />');
+		    var carouselLeftArrow = $('#carousel_left_arrow');
+		    var carouselRightArrow = $('#carousel_right_arrow');
+		    carouselLeftArrow.css({
+			    position: 'fixed',
+			    bottom: (controlBox.height() - carouselLeftArrow.height()),
+			    left: 0
+		    });
+		    carouselRightArrow.css({
+			    position: 'fixed',
+			    bottom: (controlBox.height() - carouselRightArrow.height()),
+			    right: 0
+		    });
+		    carouselLeftArrow.click(function() {
+			    histogramWrap.animate({
+			        left: 0
+			    }, "fast");
+		    });
+		    carouselRightArrow.click(function() {
+			    histogramWrap.animate({
+			        left: (controlBox.width() - histogramWrap.width())
+			    }, "fast");
+		
+		    });
+		}
+		
+	    controlBox.mousewheel(function(e, delta) {
+            e.preventDefault();
+            this.scrollLeft -= (delta * 30);
+        });
     }
 });
