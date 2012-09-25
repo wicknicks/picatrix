@@ -269,17 +269,6 @@ $(document).ready(function() {
 		
 		
 		// BEGIN TEST
-		/*
-		var eStart = 0;
-		var eEnd = 0;
-		for (var i = 0; i < eventWidths.length; i++) {
-		    eEnd += eventWidths[i];
-		    //console.log(eventWidths[i]);
-		    console.log(eStart + "===" + eEnd);
-		    eStart += eventWidths[i];
-		}
-		*/
-		
 		console.log("eventLengths: ");
 		console.log(eventLengths);
 		console.log("eventWidths: ");
@@ -288,20 +277,6 @@ $(document).ready(function() {
 		console.log(eventTitles);
 		console.log("canvasAmounts: ");
 		console.log(canvasAmounts);
-		
-		/*
-		var n = 3;
-		var width = 52;
-		
-		var _s = hSpace;
-		var _e = hWidth + hSpace;
-		for (var i = 0; i < n; i++) {
-		    console.log("start: " + _s + ", end: " + _e);
-		    
-		    _s += hWidth + hSpace;
-		    _e += hSpace + hWidth;
-		}
-		*/
 		
 		var sum = 0;
 		for (var i = 0; i < eventWidths.length; i++) {
@@ -321,7 +296,8 @@ $(document).ready(function() {
 		histogramWrap.append('<div style="position:absolute; bottom:0; left:1px; width: 16px; height: 10px; background: purple;">.</div>');
 		histogramWrap.append('<div style="position:absolute; bottom:0; left:325px; width: 16px; height: 10px; background: purple;">.</div>');
         // END TEST
-        
+		
+		
 		
 		histogramWrap.mouseenter(function(e) {
 		    var x = e.pageX - this.offsetLeft + controlBox.scrollLeft();
