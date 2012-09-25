@@ -107,6 +107,7 @@ $(document).ready(function() {
 		    var values = [];
             var converter = new Converter();
             var s = converter.toSeries(events.arr[i], 75);
+            console.log(s);
             for (var j = 0; j < s.length; j++) {
                 if (s[j].n > 0) {
 				    values.push(s[j].n);
