@@ -9,7 +9,6 @@ $(document).ready(function() {
 		+ '<span style="visibility:hidden">&nbsp;</span>'
 	+ '</form>'
 	+ '<div id="viewBox">'
-	    //+ 'click to test'
         + '<!--'
 		+ '<ul id="viewGallery">'
 		+ '<li><img src="img/city_1.jpg" alt="" /></li>'
@@ -53,14 +52,6 @@ $(document).ready(function() {
 	    });
 	});
 	
-	// BEGIN TEST
-	/*
-	$('#viewBox').click(function(event) {
-		alert(sessionStorage.query);
-	});
-	*/
-	// END TEST
-	
     function drawHistogram(events) {
         
         var searchBox = $('#searchBox');
@@ -99,15 +90,18 @@ $(document).ready(function() {
 	    //var clickIndex = 0;
 	    //var hoverIndex = -1;
 	    
+	    
 	    var histValues = [];
 		var maxValue = 0;
 		var eventTitles = [];
+		var histArray = [];
 		for (var i = 0; i < events.arr.length; i++) {
 		    var values = [];
             var converter = new Converter();
             var s = converter.toSeries(events.arr[i], 75);
             for (var j = 0; j < s.length; j++) {
                 if (s[j].n > 0) {
+                	histArray.push(s[j]);
 				    values.push(s[j].n);
                 }
 			    if (s[j].n > maxValue) {
@@ -134,6 +128,7 @@ $(document).ready(function() {
 		// SET HISTOGRAMWRAP WIDTH
 		var histogramWrap = $('#histogramWrap');
 		histogramWrap.css({
+			position : 'relative',
 			width : totalEventWidth,
 			height : controlBox.height(),
 		    marginTop: 0,
@@ -206,8 +201,8 @@ $(document).ready(function() {
 		            var hBarStart = Math.floor(eStart+(_hBarStart/CANVAS_MAX_WIDTH));
 		            var hBarEnd = Math.floor(eStart+(_hBarEnd/CANVAS_MAX_WIDTH));
 		            
-		            var fooboo = Math.floor(_hBarStart/CANVAS_MAX_WIDTH);
-		            var barbaz = Math.floor(_hBarEnd/CANVAS_MAX_WIDTH);
+		            var _hStartScale = Math.floor(_hBarStart/CANVAS_MAX_WIDTH);
+		            var _hEndScale = Math.floor(_hBarEnd/CANVAS_MAX_WIDTH);
 		            if (hBarStart === hBarEnd) {
 		                var h = $('#histogram_'+hBarStart);
 		                var c = h[0].getContext("2d");
@@ -221,11 +216,11 @@ $(document).ready(function() {
 		                    var c = h[0].getContext("2d");
 		                    c.fillStyle = '#0033CC';
 		                    if (k === hBarStart) {
-		                        c.fillRect((CANVAS_MAX_WIDTH - ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart)), histogramWrap.height() - histValues[i][hBarIndex]*heightScale, ((fooboo+1) * CANVAS_MAX_WIDTH - _hBarStart), histValues[i][hBarIndex]*heightScale);
+		                        c.fillRect((CANVAS_MAX_WIDTH - ((_hStartScale+1) * CANVAS_MAX_WIDTH - _hBarStart)), histogramWrap.height() - histValues[i][hBarIndex]*heightScale, ((_hStartScale+1) * CANVAS_MAX_WIDTH - _hBarStart), histValues[i][hBarIndex]*heightScale);
 		                        
 		                    }
 		                    else if (k === hBarEnd) {
-		                        c.fillRect(0, histogramWrap.height() - histValues[i][hBarIndex]*heightScale, (hWidth - ((barbaz - fooboo - 1)*CANVAS_MAX_WIDTH) - (((fooboo+1) * CANVAS_MAX_WIDTH) - _hBarStart)), histValues[i][hBarIndex]*heightScale);
+		                        c.fillRect(0, histogramWrap.height() - histValues[i][hBarIndex]*heightScale, (hWidth - ((_hEndScale - _hStartScale - 1)*CANVAS_MAX_WIDTH) - (((_hStartScale+1) * CANVAS_MAX_WIDTH) - _hBarStart)), histValues[i][hBarIndex]*heightScale);
 		                        
 		                    }
 		                    else {
@@ -269,32 +264,31 @@ $(document).ready(function() {
 		
 		
 		// BEGIN TEST
-		console.log("eventLengths: ");
-		console.log(eventLengths);
-		console.log("eventWidths: ");
-		console.log(eventWidths);
-		console.log("eventTitles: ");
-		console.log(eventTitles);
-		console.log("canvasAmounts: ");
-		console.log(canvasAmounts);
-		
+		var ranges = [];
 		var sum = 0;
 		for (var i = 0; i < eventWidths.length; i++) {
-		    //console.log( sum );
-		    //console.log( eventWidths[i] );
-		    //console.log( eventLengths[i] );
 		    var _s = sum + hSpace;
 		    var _e = sum + hWidth + hSpace;
 		    for (var j = 0; j < eventLengths[i]; j++) {
-		        console.log("eventTitle: " + eventTitles[i] + "   start: " + _s + ", end: " + _e);
+		    	ranges.push({
+		    		"title" : eventTitles[i],
+		    		"start" : _s,
+		    		"end" : _e
+		    	});
 		        _s += hWidth + hSpace;
 		        _e += hSpace + hWidth;
 		    }
 		    sum += eventWidths[i];
 		}
-		
-		histogramWrap.append('<div style="position:absolute; bottom:0; left:1px; width: 16px; height: 10px; background: purple;">.</div>');
-		histogramWrap.append('<div style="position:absolute; bottom:0; left:325px; width: 16px; height: 10px; background: purple;">.</div>');
+        histogramWrap.append('<div id="histHoverBar"></div>');
+        $('#histHoverBar').css({
+        	position: 'absolute',
+        	bottom: 0,
+        	left: -9999,
+        	width: hWidth,
+        	height: 0,
+        	backgroundColor: 'purple'
+        });
         // END TEST
 		
 		
@@ -306,6 +300,19 @@ $(document).ready(function() {
 	    histogramWrap.mousemove(function(e) {
 		    var x = e.pageX - this.offsetLeft + controlBox.scrollLeft();
 		    viewBox.html(x);
+		    
+		    // *** IMPORTANT ***
+		    // NEED TO OPTIMIZE TO NEAR O(1) INSTEAD OF O(n)
+		    for (var i = 0; i < ranges.length; i++) {
+		    	if (x >= ranges[i].start && x <= ranges[i].end) {
+		    		$('#histHoverBar').css({
+		    			left: ranges[i].start,
+		    			height: histArray[i].n * heightScale
+		    		});
+		    		break;
+		    	}
+		    }
+		    
 	    });
 	    histogramWrap.mouseleave(function(e) {
 		    viewBox.empty();
