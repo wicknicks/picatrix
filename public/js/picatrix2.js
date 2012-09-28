@@ -263,7 +263,26 @@ $(document).ready(function() {
 		
 		
 		
-		// BEGIN TEST
+        histogramWrap.append('<div id="histHoverGuide"></div><div id="histHoverBar"></div>');
+        $('#histHoverGuide').css({
+        	position: 'absolute',
+        	bottom: 0,
+        	left: -9999,
+        	width: hWidth,
+        	height: 0,
+        	backgroundColor: '#808080'
+        });
+        $('#histHoverBar').css({
+        	position: 'absolute',
+        	bottom: 0,
+        	left: -9999,
+        	width: hWidth,
+        	height: 0,
+        	backgroundColor: 'purple'
+        });
+		
+		
+		
 		var ranges = [];
 		var sum = 0;
 		for (var i = 0; i < eventWidths.length; i++) {
@@ -280,31 +299,16 @@ $(document).ready(function() {
 		    }
 		    sum += eventWidths[i];
 		}
-        histogramWrap.append('<div id="histHoverBar"></div>');
-        $('#histHoverBar').css({
-        	position: 'absolute',
-        	bottom: 0,
-        	left: -9999,
-        	width: hWidth,
-        	height: 0,
-        	backgroundColor: 'purple'
-        });
-        // END TEST
 		
-		
-		
-		histogramWrap.mouseenter(function(e) {
-		    var x = e.pageX - this.offsetLeft + controlBox.scrollLeft();
-		    viewBox.html(x);
-	    });
-	    histogramWrap.mousemove(function(e) {
-		    var x = e.pageX - this.offsetLeft + controlBox.scrollLeft();
-		    viewBox.html(x);
-		    
+		function setHoverBar(x) {
 		    // *** IMPORTANT ***
 		    // NEED TO OPTIMIZE TO NEAR O(1) INSTEAD OF O(n)
 		    for (var i = 0; i < ranges.length; i++) {
 		    	if (x >= ranges[i].start && x <= ranges[i].end) {
+		    		$('#histHoverGuide').css({
+		    			left: ranges[i].start,
+		    			height: histogramWrap.height()
+		    		});
 		    		$('#histHoverBar').css({
 		    			left: ranges[i].start,
 		    			height: histArray[i].n * heightScale
@@ -312,17 +316,36 @@ $(document).ready(function() {
 		    		break;
 		    	}
 		    }
+		}
+		
+		histogramWrap.mouseenter(function(e) {
+		    var x = e.pageX - this.offsetLeft + controlBox.scrollLeft();
+		    //viewBox.html(x);
+		    setHoverBar(x);
+	    });
+	    histogramWrap.mousemove(function(e) {
+		    var x = e.pageX - this.offsetLeft + controlBox.scrollLeft();
+		    //viewBox.html(x);
+		    setHoverBar(x);
 		    
 	    });
 	    histogramWrap.mouseleave(function(e) {
-		    viewBox.empty();
+		    //viewBox.empty();
+		    $('#histHoverGuide').css({
+		    	left: -9999,
+		    	height: 0
+		    });
+		    $('#histHoverBar').css({
+		    	left: -9999,
+		    	height: 0
+			});
 	    });
 		
 	    controlBox.mousewheel(function(e, delta) {
             e.preventDefault();
             this.scrollLeft -= (delta * 30);
             var x = e.pageX + this.scrollLeft;
-            viewBox.html(x);
+            //viewBox.html(x);
         });
     }
 });
