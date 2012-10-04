@@ -275,10 +275,19 @@ $(document).ready(function() {
         $('#histHoverBar').css({
         	position: 'absolute',
         	bottom: 0,
-        	left: -9999,
-        	width: hWidth,
+        	left: 0,
+        	width: 0,
         	height: 0,
         	backgroundColor: 'purple'
+        });
+        controlBox.append('<div id="preview"></div>');
+        $('#preview').css({
+        	position: 'fixed',
+        	bottom: controlBox.height(),
+        	left: 0,
+        	width: 0,
+        	height: 0,
+        	backgroundColor: 'black'
         });
 		
 		
@@ -307,12 +316,19 @@ $(document).ready(function() {
 		    	if (x >= ranges[i].start && x <= ranges[i].end) {
 		    		$('#histHoverGuide').css({
 		    			left: ranges[i].start,
+		    			width: hWidth,
 		    			height: histogramWrap.height()
 		    		});
 		    		$('#histHoverBar').css({
 		    			left: ranges[i].start,
+		    			width: hWidth,
 		    			height: histArray[i].n * heightScale
 		    		});
+        			$('#preview').css({
+        				left: ranges[i].start,
+        				width: 150,
+        				height: 100
+        			});
 		    		break;
 		    	}
 		    }
@@ -332,11 +348,18 @@ $(document).ready(function() {
 	    histogramWrap.mouseleave(function(e) {
 		    //viewBox.empty();
 		    $('#histHoverGuide').css({
-		    	left: -9999,
+		    	left: 0,
+        		width: 0,
 		    	height: 0
 		    });
 		    $('#histHoverBar').css({
-		    	left: -9999,
+		    	left: 0,
+        		width: 0,
+		    	height: 0
+			});
+		    $('#preview').css({
+		    	left: 0,
+        		width: 0,
 		    	height: 0
 			});
 	    });
@@ -346,6 +369,7 @@ $(document).ready(function() {
             this.scrollLeft -= (delta * 30);
             var x = e.pageX + this.scrollLeft;
             //viewBox.html(x);
+		    setHoverBar(x);
         });
     }
 });
