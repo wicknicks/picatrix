@@ -324,6 +324,16 @@ $(document).ready(function() {
 		    			width: hWidth,
 		    			height: histArray[i].n * heightScale
 		    		});
+		    		break;
+		    	}
+		    }
+		}
+		
+		function setPreviewBox(x) {
+		    // *** IMPORTANT ***
+		    // NEED TO OPTIMIZE TO NEAR O(1) INSTEAD OF O(n)
+		    for (var i = 0; i < ranges.length; i++) {
+		    	if (x >= ranges[i].start && x <= ranges[i].end) {
         			$('#preview').css({
         				left: ranges[i].start,
         				width: 150,
@@ -332,17 +342,22 @@ $(document).ready(function() {
 		    		break;
 		    	}
 		    }
+		
 		}
 		
 		histogramWrap.mouseenter(function(e) {
 		    var x = e.pageX - this.offsetLeft + controlBox.scrollLeft();
+		    var x1 = e.pageX - this.offsetLeft;
 		    //viewBox.html(x);
 		    setHoverBar(x);
+		    setPreviewBox(x1);
 	    });
 	    histogramWrap.mousemove(function(e) {
 		    var x = e.pageX - this.offsetLeft + controlBox.scrollLeft();
+		    var x1 = e.pageX - this.offsetLeft;
 		    //viewBox.html(x);
 		    setHoverBar(x);
+		    setPreviewBox(x1);
 		    
 	    });
 	    histogramWrap.mouseleave(function(e) {
@@ -368,8 +383,10 @@ $(document).ready(function() {
             e.preventDefault();
             this.scrollLeft -= (delta * 30);
             var x = e.pageX + this.scrollLeft;
+            var x1 = e.pageX;
             //viewBox.html(x);
 		    setHoverBar(x);
+		    setPreviewBox(x1);
         });
     }
 });
