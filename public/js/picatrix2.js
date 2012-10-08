@@ -334,8 +334,14 @@ $(document).ready(function() {
 		    // NEED TO OPTIMIZE TO NEAR O(1) INSTEAD OF O(n)
 		    for (var i = 0; i < ranges.length; i++) {
 		    	if (x >= ranges[i].start && x <= ranges[i].end) {
+		    		// start - (half of preview width) + (half of bar width)
+		    		var leftPos = ranges[i].start - 75 + 8;
+		    		if (leftPos < 0) leftPos = 0;
+		    		// start + (half of preview width) - (half of bar width)
+		    		if ((ranges[i].start + 75 - 8) > $('#controlBox').width()) leftPos = $('#controlBox').width() - 150;
+		    		viewBox.html(leftPos + "<br />" + (ranges[i].start));
         			$('#preview').css({
-        				left: ranges[i].start,
+        				left: leftPos,
         				width: 150,
         				height: 100
         			});
