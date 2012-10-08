@@ -339,7 +339,7 @@ $(document).ready(function() {
 		    		if (leftPos < 0) leftPos = 0;
 		    		// start + (half of preview width) - (half of bar width)
 		    		if ((ranges[i].start + 75 - 8) > $('#controlBox').width()) leftPos = $('#controlBox').width() - 150;
-		    		viewBox.html(leftPos + "<br />" + (ranges[i].start));
+		    		//viewBox.html(leftPos + "<br />" + (ranges[i].start));
         			$('#preview').css({
         				left: leftPos,
         				width: 150,
