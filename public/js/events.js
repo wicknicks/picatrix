@@ -161,14 +161,6 @@ Converter.prototype.toSeries = function(event, nbins) {
   return y;
 };
 
-var query = "";
-var series = "";
-(new Searcher()).keysearch('trip', function(events) {
-    query = events;
-    //iterator(titlePrinter, {data: events.arr})
-    series =  (new Converter()).toSeries(events.arr[0], 75);
-  });
-
 function titlePrinter(e, l) {
   var lvl = l || "";
   console.log("tp: " + e.title + " " + lvl);
