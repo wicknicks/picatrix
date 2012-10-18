@@ -8,7 +8,7 @@ $(document).ready(function() {
 		+ '<input type="submit" name="button" value="Search" />'
 		+ '<span style="visibility:hidden">&nbsp;</span>'
 	+ '</form>'
-	+ '<div id="viewBox" style="overflow: auto">'
+	+ '<div id="viewBox">'
         + '<!--'
 		+ '<ul id="viewGallery">'
 		+ '<li><img src="img/city_1.jpg" alt="" /></li>'
@@ -63,19 +63,29 @@ $(document).ready(function() {
 	    
 	    var viewBox = $('#viewBox');
 	    viewBox.css({
-		    width: 4000,
+		    width: $(window).width(),
 		    height: Math.floor(($(window).height() - searchBox.height()) * 76/100),
 		    minHeight: 200,
-		    backgroundColor: 'azure'
+		    backgroundColor: 'azure',
+       	overflowX: 'hidden',
+      	overflowY: 'hidden'
 	    });
+
 	    
-	    viewBox.html('<img src="img/nature_1.jpg" />'
-		+ '<img src="img/nature_2.jpg"  />'
-		+ '<img src="img/nature_3.jpg" alt="" />'
-		+ '<img src="img/nature_4.jpg" alt="" />'
-		+ '<img src="img/nature_5.jpg" alt="" />');
+	   var testImagesViewGallery = '<img src="img/nature_1.jpg" />'
+		+ '<img src="img/nature_2.jpg" />'
+		+ '<img src="img/nature_3.jpg" />'
+		+ '<img src="img/nature_4.jpg" />'
+		+ '<img src="img/nature_5.jpg" />';
+		
+	    viewBox.html('<div id = "viewGallery"></div>');
+	    var viewGallery = $('#viewGallery');
+	    viewGallery.css({
+	      height: Math.floor(($(window).height() - searchBox.height()) * 76/100),
+	    });
+	    viewGallery.html(testImagesViewGallery)
 	    
-	    var controlBox = $('#controlBox');
+      var controlBox = $('#controlBox');
 	    controlBox.css({
 	        position: 'relative',
 		    overflowX: 'hidden',
@@ -86,9 +96,9 @@ $(document).ready(function() {
 		    backgroundColor: '#000'
 	    });
 	    
-	    //var viewGallery = $('#viewGallery');
+	    
         
-        var CANVAS_MAX_WIDTH = 32766; //(2^15)-2
+      var CANVAS_MAX_WIDTH = 32766; //(2^15)-2
         
 	    var hWidth = 16;
 	    var hSpace = 1;
@@ -266,9 +276,7 @@ $(document).ready(function() {
     			    //scrollLeft: 0
 			        scrollLeft: ix * jump
 			    }, "fast");
-			    viewBox.animate({
-			        scrollRight: 50
-			    }, "fast");
+			    viewBox.animate ({scrollLeft: ix*500}, "fast");
 		    });
 		    carouselRightArrow.click(function() {
   		    var maxJump = Math.ceil((histogramWrap.width() - controlBox.width())/jump)
@@ -277,9 +285,7 @@ $(document).ready(function() {
 			        //scrollLeft: (histogramWrap.width() - controlBox.width())
 			        scrollLeft: ix * jump
 			    }, "fast");
-			    viewBox.animate({
-			        scrollRight: 100
-			    }, "fast");
+			    viewBox.animate ({scrollLeft: ix*500}, "fast");
 		    });
 		}
 		

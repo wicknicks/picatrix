@@ -114,7 +114,11 @@ a:active {  }
 	padding: 0;
 	border: 0;
 	text-align: left;
-	overflow: hidden;
+}
+
+/* [arjun] */
+#viewGallery {
+  width: 4000px;
 }
 
 /*
