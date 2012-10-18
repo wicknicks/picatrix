@@ -8,7 +8,7 @@ $(document).ready(function() {
 		+ '<input type="submit" name="button" value="Search" />'
 		+ '<span style="visibility:hidden">&nbsp;</span>'
 	+ '</form>'
-	+ '<div id="viewBox">'
+	+ '<div id="viewBox" style="overflow: auto">'
         + '<!--'
 		+ '<ul id="viewGallery">'
 		+ '<li><img src="img/city_1.jpg" alt="" /></li>'
@@ -63,11 +63,17 @@ $(document).ready(function() {
 	    
 	    var viewBox = $('#viewBox');
 	    viewBox.css({
-		    width: $(window).width(),
+		    width: 4000,
 		    height: Math.floor(($(window).height() - searchBox.height()) * 76/100),
 		    minHeight: 200,
 		    backgroundColor: 'azure'
 	    });
+	    
+	    viewBox.html('<img src="img/nature_1.jpg" />'
+		+ '<img src="img/nature_2.jpg"  />'
+		+ '<img src="img/nature_3.jpg" alt="" />'
+		+ '<img src="img/nature_4.jpg" alt="" />'
+		+ '<img src="img/nature_5.jpg" alt="" />');
 	    
 	    var controlBox = $('#controlBox');
 	    controlBox.css({
@@ -239,6 +245,11 @@ $(document).ready(function() {
 		    controlBox.append('<img id="carousel_left_arrow" src="img/carousel_left_arrow.png" width="53" height="52" /><img id="carousel_right_arrow" src="img/carousel_right_arrow.png" width="53" height="52" />');
 		    var carouselLeftArrow = $('#carousel_left_arrow');
 		    var carouselRightArrow = $('#carousel_right_arrow');
+
+		    //[arjun]
+		    var jump = 250;
+		    var ix = 0;
+		    
 		    carouselLeftArrow.css({
 			    position: 'fixed',
 			    bottom: (controlBox.height() - carouselLeftArrow.height()),
@@ -250,13 +261,24 @@ $(document).ready(function() {
 			    right: 0
 		    });
 		    carouselLeftArrow.click(function() {
+		      if (ix > 0) ix--;
 			    controlBox.animate({
-			        scrollLeft: 0
+    			    //scrollLeft: 0
+			        scrollLeft: ix * jump
+			    }, "fast");
+			    viewBox.animate({
+			        scrollRight: 50
 			    }, "fast");
 		    });
 		    carouselRightArrow.click(function() {
+  		    var maxJump = Math.ceil((histogramWrap.width() - controlBox.width())/jump)
+		      if (ix < maxJump) ix++;
 			    controlBox.animate({
-			        scrollLeft: (histogramWrap.width() - controlBox.width())
+			        //scrollLeft: (histogramWrap.width() - controlBox.width())
+			        scrollLeft: ix * jump
+			    }, "fast");
+			    viewBox.animate({
+			        scrollRight: 100
 			    }, "fast");
 		    });
 		}
