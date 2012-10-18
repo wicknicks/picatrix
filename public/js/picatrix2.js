@@ -71,8 +71,7 @@ $(document).ready(function() {
       	overflowY: 'hidden'
 	    });
 
-	    
-	   var testImagesViewGallery = '<img src="img/nature_1.jpg" />'
+   var testImagesViewGallery = '<img src="img/nature_1.jpg" />'
 		+ '<img src="img/nature_2.jpg" />'
 		+ '<img src="img/nature_3.jpg" />'
 		+ '<img src="img/nature_4.jpg" />'
