@@ -51,7 +51,7 @@ app.configure( function() {
     app.use(express.logger('dev'));
 });
 
-var APP_PORT = 2900;
+var APP_PORT = 8080;
 app.listen(APP_PORT);
 console.log('listening at http://localhost:' + APP_PORT);
 
@@ -74,9 +74,25 @@ app.post('/star', function(req, res, next) {
   res.send((result));
 });
 
+app.get('/image/:id/:res', function (req, res, next) {
+  var fname = '/data/photos/' + req.params.id;
+  if (req.params.res != 'o') fname += '.' + req.params.res;
+
+  if (fs.existsSync && !fs.existsSync(fname) ) {
+    res.send('')
+    return;
+  }
+    
+  var content = fs.readFileSync(fname);
+  res.header ('Content-Type', 'image/jpeg');
+  res.send(content);
+});
+
 app.post('/search', function (req, res, next) {
   var query = req.body.query;
-  console.log('query req: %s', query);
+  var u = '';
+  if (req.connection) u = req.connection.remoteAddress;
+  console.log('[%s] query req: %s', u, query);
   var result = {query: query};
   result.n = 0;
   result.arr = [];

@@ -118,7 +118,27 @@ a:active {  }
 
 /* [arjun] */
 #viewGallery {
-  width: 4000px;
+  width: 1000px;
+}
+
+div#viewGallery img {
+  margin: 0px;
+  padding: 5px;
+}
+
+#tbl {
+  border: 0px solid black;
+  height: 100%;
+}
+
+.tbl320 {
+  width: 330px;
+  height: auto;
+}
+
+.tbl640 {
+  width: 650px;
+  height: auto;
 }
 
 /*

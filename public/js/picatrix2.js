@@ -52,62 +52,92 @@ $(document).ready(function() {
 	    });
 	});
 	
-    function drawHistogram(events) {
-        
-        var searchBox = $('#searchBox');
-	    searchBox.css({
-		    width: $(window).width(),
-		    height: 50,
-		    backgroundColor: 'CornflowerBlue'
-	    });
-	    
-	    var viewBox = $('#viewBox');
-	    viewBox.css({
-		    width: $(window).width(),
-		    height: Math.floor(($(window).height() - searchBox.height()) * 76/100),
-		    minHeight: 200,
-		    backgroundColor: 'azure',
-       	overflowX: 'hidden',
-      	overflowY: 'hidden'
-	    });
+  function drawHistogram(events) {
+    
+    var searchBox = $('#searchBox');
+      searchBox.css({
+	    width: $(window).width(),
+	    height: 50,
+	    backgroundColor: 'CornflowerBlue'
+    });
+    
+    var viewBox = $('#viewBox');
+    viewBox.css({
+	    width: $(window).width(),
+	    height: Math.floor(($(window).height() - searchBox.height()) * 76/100),
+	    minHeight: 200,
+	    backgroundColor: 'azure',
+     	overflowX: 'hidden',
+    	overflowY: 'hidden'
+    });
 
-   var testImagesViewGallery = '<img src="img/nature_1.jpg" />'
-		+ '<img src="img/nature_2.jpg" />'
-		+ '<img src="img/nature_3.jpg" />'
-		+ '<img src="img/nature_4.jpg" />'
-		+ '<img src="img/nature_5.jpg" />';
+		var testImagesViewGallery = '<table id="tbl"><tr></tr></table>';
+		  
+		/*testimages.forEach( function (e) {
+		  if (e.indexOf('-') > 0)
+  		  testImagesViewGallery += '<img src="image/' + e + '/640" />' 
+		}) */
 		
-	    viewBox.html('<div id = "viewGallery"></div>');
-	    var viewGallery = $('#viewGallery');
-	    viewGallery.css({
-	      height: Math.floor(($(window).height() - searchBox.height()) * 76/100),
-	    });
-	    viewGallery.html(testImagesViewGallery)
-	    
-      var controlBox = $('#controlBox');
-	    controlBox.css({
-	        position: 'relative',
-		    overflowX: 'hidden',
-		    overflowY: 'hidden',
-		    width: $(window).width(),
-		    height: $(window).height() - searchBox.height() - viewBox.height(),
-		    minHeight: 100,
-		    backgroundColor: '#000'
-	    });
-	    
-	    
-        
-      var CANVAS_MAX_WIDTH = 32766; //(2^15)-2
-        
-	    var hWidth = 16;
-	    var hSpace = 1;
-	    
-	    //var clickIndex = 0;
-	    //var hoverIndex = -1;
-	    
-	    
-	    var histValues = [];
-		var maxValue = 0;
+		viewBox.html('<div id = "viewGallery"></div>');
+    var viewGallery = $('#viewGallery');
+    viewGallery.css({
+      height: Math.floor(($(window).height() - searchBox.height()) * 76/100),
+    });
+    viewGallery.html(testImagesViewGallery);
+    
+    for (i=0; i<6;) {
+      var temp = '<td VALIGN=TOP ALIGN=LEFT>' +
+		   ' <div style="border: 0px solid red" class= "tbl640">'+
+		   '<img src="/image/' + testimages[i++] + '/640"></img>'+
+		   '<div><img src="/image/' + testimages[i++] + '/320"></img>'+
+		   '<img height="214px" src="/image/' + testimages[i++] + '/320"></img></div>'+
+		   '</div>' +
+		   '</td>';
+      $('#tbl tr').append(temp);
+      
+      temp = '<td VALIGN=TOP ALIGN=LEFT>' +
+		    ' <div style="border: 0px solid blue" class= "tbl320">' + 
+  		  '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
+  		  '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
+ 		    '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
+	  	  '</div>' +
+		    '</td>';
+      $('#tbl tr').append(temp);
+    }
+    
+    for (i=6; i<100; ) {
+      temp = '<td VALIGN=TOP ALIGN=LEFT>' +
+		    ' <div style="border: 0px solid blue" class= "tbl320">' + 
+  		  '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
+  		  '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
+ 		    '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
+	  	  '</div>' +
+		    '</td>';
+      $('#tbl tr').append(temp); 
+    }
+    
+    var controlBox = $('#controlBox');
+    controlBox.css({
+        position: 'relative',
+      overflowX: 'hidden',
+      overflowY: 'hidden',
+      width: $(window).width(),
+      height: $(window).height() - searchBox.height() - viewBox.height(),
+      minHeight: 100,
+      backgroundColor: '#000'
+    });
+    
+    var CANVAS_MAX_WIDTH = 32766; //(2^15)-2
+      
+    var hWidth = 16;
+    var hSpace = 1;
+    
+    //var clickIndex = 0;
+    //var hoverIndex = -1;
+    
+    
+    var histValues = [];
+	  var maxValue = 0;
 		var eventTitles = [];
 		var histArray = [];
 		for (var i = 0; i < events.arr.length; i++) {
@@ -271,20 +301,23 @@ $(document).ready(function() {
 		    });
 		    carouselLeftArrow.click(function() {
 		      if (ix > 0) ix--;
-			    controlBox.animate({
+		      controlBox.animate({
     			    //scrollLeft: 0
 			        scrollLeft: ix * jump
 			    }, "fast");
-			    viewBox.animate ({scrollLeft: ix*500}, "fast");
+			    viewBox.animate ({scrollLeft: ix*500}, "slow");
 		    });
 		    carouselRightArrow.click(function() {
   		    var maxJump = Math.ceil((histogramWrap.width() - controlBox.width())/jump)
-		      if (ix < maxJump) ix++;
+		      
+		      //if (ix < maxJump) ix++;
+		      ix++
+		      
 			    controlBox.animate({
 			        //scrollLeft: (histogramWrap.width() - controlBox.width())
-			        scrollLeft: ix * jump
+			        scrollLeft: (Math.min(ix, maxJump)) * jump
 			    }, "fast");
-			    viewBox.animate ({scrollLeft: ix*500}, "fast");
+			    viewBox.animate ({scrollLeft: ix*500}, "slow");
 		    });
 		}
 		
@@ -421,5 +454,18 @@ $(document).ready(function() {
 		    setHoverBar(x);
 		    setPreviewBox(x1);
         });
+        
+        var middle = true;
+        $('#controlBox').click(function() {
+        if (middle) {
+          viewBox.animate ({scrollLeft: 7250}, "slow");
+          middle = false;
+        } else {
+          viewBox.animate ({scrollLeft: 0}, "slow");
+          middle = true;
+        }
+      });
+      
     }
+    
 });
