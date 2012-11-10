@@ -1,0 +1,137 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<link rel="stylesheet" type="text/css" href="css/position.css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(main);
+var images = [];
+var SPc = {width: 160, height: 240};
+var SP = {width: 180, height: 240};
+var SL = {width: 320, height: 240};
+var P = {width: 360, height: 480};
+var L = {width: 640, height: 480};
+
+function main() {
+  for (var i=1; i<21; i++) {
+    var img = new Image()
+    img.src = '/pics/w/' + i + '.320.JPG';
+    images.push(img);
+  }
+  setTimeout('initLayout()', 300);
+}
+
+function initLayout() {
+  var s = "";
+  for (var i=0; i<images.length; i++) {
+    if ((images[i].width/images[i].height) > 1) s += "L"
+    else s += "P";
+  }
+  s = "PPPPPLLLLLLLLLLPPPLLLLLLLLPLLLLLLLLLLLLLLLLLLPLLPPPLL"
+  var WIDTH = $('#outer').width();
+  var HEIGHT = $('#outer').height();
+  var minHeight = 240;
+  
+  console.log(WIDTH + " " + HEIGHT + " " + HEIGHT/minHeight);
+  var rows = Math.floor(HEIGHT/minHeight);
+  var contentRows = []
+  var currentRow = {width: 0, images: []};
+  for (var i=0; i<s.length; i++) {
+    var rect = SL;
+    if (s[i] == 'P') rect = SP;
+    if (currentRow.width + rect.width > WIDTH) {
+      contentRows.push(currentRow);
+      currentRow = {width: 0, images: []};
+    } else {
+      currentRow.width = currentRow.width + rect.width;
+      currentRow.images.push(images[i])
+    }
+  }
+  contentRows.push(currentRow);
+  console.log(contentRows.length);
+  for (var i=0; i<contentRows.length; i++) {
+    var crs = "" + contentRows[i].width + " " + contentRows[i].images.length;
+    console.log("ContentRow " + crs);
+  }
+  
+  for (var k=0; k<rows; k++) {
+    $('#outer').append('<div style="width:100%;" id="inner'+k+'"></div>');
+    for (var i=0; i<contentRows[k].images.length;i++) {
+      $('#inner'+k).append(contentRows[k].images[i]);
+      var margX = (HEIGHT - rows*minHeight)/(2*rows) - 2;
+      var margY = ((WIDTH - contentRows[k].width)/(2*contentRows[k].images.length)) - 2;
+      contentRows[k].images[i].style.marginRight = margY;
+      contentRows[k].images[i].style.marginLeft = margY;
+      contentRows[k].images[i].style.marginTop = margX;
+      contentRows[k].images[i].style.marginBottom = margX;
+    }
+  }
+}
+
+</script>
+</head>
+<body>
+
+<div id = "outer" style="position:relative;width:90%;height:75%;border-style:solid;border-width:5px;margin-left: auto;margin-right:auto;margin-top:50px">
+
+<!-- image clip -->
+<!-- 
+<div id= "inner1" style="position:absolute;top:0;left:50">
+<img src="pics/1.240.jpg"></img>
+</div>
+
+<div id= "inner2" style="position:absolute;top:250;left:50">
+<img src="pics/1.240.jpg" style="position:absolute;clip:rect(0,170px,240px,10px)"></img>
+</div>
+
+<div id= "inner3" style="position:absolute;top:0;left:350">
+<img src="pics/w/5.640.JPG" style=""></img>
+</div>
+
+<div id= "inner4" style="position:absolute;top:500;left:350">
+<img src="pics/w/5.320.JPG"></img>
+<img src="pics/w/5.320.JPG"></img>
+</div>
+-->
+<!--
+<div id= "inner1" style="position:absolute;top:0;left:0">
+<img src="pics/1.jpg"></img>
+</div>
+
+<div id= "inner2" style="position:absolute;top:0;left:370">
+<img src="pics/4.240.jpg"></img>
+<img src="pics/5.240.jpg"></img>
+</div>
+
+<div id= "inner3" style="position:absolute;top:0;left:20">
+<img src="pics/5.240.jpg"></img>
+</div>
+
+<div id= "inner4" style="position:absolute;bottom:0;left:400">
+<img src="pics/5.jpg"></img>
+</div>
+
+<div id= "inner6" style="position:absolute;bottom:0;left:0">
+<img src="pics/1.240.jpg"></img>
+</div>
+<div id= "inner7" style="position:absolute;bottom:0;left:180">
+<img src="pics/1.240.jpg"></img>
+</div>
+-->
+<!--
+<div id= "inner1" style="position:absolute;top:0:left:0">
+<img src="pics/1.jpg"></img>
+</div>
+
+<div id= "inner4" style="position:absolute;bottom:0;left:0">
+<img src="pics/5.jpg"></img>
+</div>
+
+<div id= "inner7" style="position:absolute;top:0;left:400">
+<img src="pics/2.jpg"></img>
+</div>
+-->
+
+</div>
+</body>
+</html>
