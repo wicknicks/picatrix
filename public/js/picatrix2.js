@@ -1,3 +1,5 @@
+	var contentRows;
+	
 $(document).ready(function() {
 	// BEGIN DYNAMIC SITE CREATION
 	$('#disableBox').hide();
@@ -28,7 +30,7 @@ $(document).ready(function() {
 	+ '</div>'
 	+ '');
 	if (typeof(sessionStorage.query) === "undefined") {
-	    sessionStorage.query = "trip";
+	    sessionStorage.query = "ashley joel wedding";
 	}
 	$('[name=query]').val(sessionStorage.query);
 	// END DYNAMIC SITE CREATION
@@ -52,6 +54,45 @@ $(document).ready(function() {
 	    });
 	});
 	
+	function initLayout(WIDTH, HEIGHT, minHeight) {
+	  var images = [];
+	  for (var i=1; i<53; i++) {
+      var img = new Image()
+      img.src = '/pics/w/' + i + '.320.JPG';
+      images.push(img);
+    }
+    
+	  var SPc = {width: 160, height: 240};
+    var SP = {width: 180, height: 240};
+    var SL = {width: 320, height: 240};
+    var P = {width: 360, height: 480};
+    var L = {width: 640, height: 480};
+
+    var s = "";
+    for (var i=0; i<images.length; i++) {
+      if ((images[i].width/images[i].height) > 1) s += "L"
+      else s += "P";
+    }
+    console.log(s);
+    s = "PPPPPLLLLLLLLLLPPPLLLLLLLLPLLLLLLLLLLLLLLLLLLPLLPPPLL";
+    
+    var rows = Math.floor(HEIGHT/minHeight);
+    var contentRows = []
+    var currentRow = {width: 0, images: []};
+    for (var i=0; i<s.length; i++) {
+      var rect = SL;
+      if (s[i] == 'P') rect = SP;
+      if (currentRow.width + rect.width > WIDTH) {
+        contentRows.push(currentRow);
+        currentRow = {width: 0, images: []};
+      }
+      currentRow.width = currentRow.width + rect.width;
+      currentRow.images.push(images[i])
+    }
+    contentRows.push(currentRow);
+    return contentRows;
+  }
+	
   function drawHistogram(events) {
     
     var searchBox = $('#searchBox');
@@ -71,54 +112,79 @@ $(document).ready(function() {
     	overflowY: 'hidden'
     });
 
-		var testImagesViewGallery = '<table id="tbl"><tr></tr></table>';
-		  
-		/*testimages.forEach( function (e) {
-		  if (e.indexOf('-') > 0)
-  		  testImagesViewGallery += '<img src="image/' + e + '/640" />' 
-		}) */
+		var testImagesViewGallery = '<div id = "outer" class= "outer"></div>';
 		
 		viewBox.html('<div id = "viewGallery"></div>');
     var viewGallery = $('#viewGallery');
     viewGallery.css({
       height: Math.floor(($(window).height() - searchBox.height()) * 76/100),
+      width: "100%"
     });
     viewGallery.html(testImagesViewGallery);
+
+
+
+
+    /**** render content ****/
     
-    for (i=0; i<6;) {
-      var temp = '<td VALIGN=TOP ALIGN=LEFT>' +
-		   ' <div style="border: 0px solid red" class= "tbl640">'+
-		   '<img src="/image/' + testimages[i++] + '/640"></img>'+
-		   '<div><img src="/image/' + testimages[i++] + '/320"></img>'+
-		   '<img height="214px" src="/image/' + testimages[i++] + '/320"></img></div>'+
-		   '</div>' +
-		   '</td>';
-      $('#tbl tr').append(temp);
-      
-      temp = '<td VALIGN=TOP ALIGN=LEFT>' +
-		    ' <div style="border: 0px solid blue" class= "tbl320">' + 
-  		  '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
-  		  '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
- 		    '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
-	  	  '</div>' +
-		    '</td>';
-      $('#tbl tr').append(temp);
+    var WIDTH = $('#outer').width();
+    var HEIGHT = $('#outer').height();
+    var minHeight = 240;
+    var rows = Math.floor(HEIGHT/minHeight);
+    
+    console.log(WIDTH + " " + HEIGHT + " " + HEIGHT/minHeight);
+    contentRows = initLayout(WIDTH, HEIGHT, minHeight);
+    
+    $('#outer').html('<table id="galleryTable"><tr></tr></table>');
+    $('#galleryTable').css ({
+      height: viewGallery.height(),
+      width: 0
+    });
+		
+		for (var col = 0; col < Math.ceil(contentRows.length/rows); col++) {
+		
+		  var tdTemplate = '<td id="gt_'+col+'"></td>';
+		  $('#galleryTable tr').append(tdTemplate);
+      $('#galleryTable').css({ width: (col+1) * $(window).width() });
+		  
+		  for (var k=0; k<rows; k++) {
+		  
+        $("#gt_"+col).append('<div style="width:' + ($(window).width() + 50) + 
+                           ';" id="inner_' + col + '_' + k + '"></div>');
+
+        if (contentRows.length <= (col * rows + k)) continue;                           
+        
+        for (var i=0; i<contentRows[col * rows + k].images.length;i++) {
+        
+          console.log(i + " " + contentRows[col * rows + k].images.length);
+          $('#inner_'+col+'_'+k).append(contentRows[col * rows + k].images[i]);
+          
+          var margX = (HEIGHT - (rows * minHeight))/(2 * rows) - 2;
+          var margY = ((WIDTH - contentRows[k].width)/(2*contentRows[col * rows + k].images.length)) - 2;
+          //contentRows[col * rows + k].images[i].style.marginRight = margY;
+          //contentRows[col * rows + k].images[i].style.marginLeft = margY;
+          //contentRows[col * rows + k].images[i].style.marginTop = margX;
+          //contentRows[col * rows + k].images[i].style.marginBottom = margX;
+        }
+      }
     }
     
-    for (i=6; i<100; ) {
-      temp = '<td VALIGN=TOP ALIGN=LEFT>' +
-		    ' <div style="border: 0px solid blue" class= "tbl320">' + 
-  		  '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
-  		  '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
- 		    '<img height="' + (viewGallery.height()/3-20) + '" src="/image/' + testimages[i++] + '/320"></img>'+
-	  	  '</div>' +
-		    '</td>';
-      $('#tbl tr').append(temp); 
-    }
+    /**** render content [end] ****/
+    console.log('#inner_0_2' + " --->>>> " + $('#inner_0_2').html());
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     var controlBox = $('#controlBox');
     controlBox.css({
-        position: 'relative',
+      position: 'relative',
       overflowX: 'hidden',
       overflowY: 'hidden',
       width: $(window).width(),
@@ -456,13 +522,16 @@ $(document).ready(function() {
         });
         
         var middle = true;
+        var scFlag = 0;
         $('#controlBox').click(function() {
         if (middle) {
-          viewBox.animate ({scrollLeft: 7250}, "slow");
-          middle = false;
+          scFlag += 1;
+          if (scFlag > Math.floor(contentRows.length/rows)) scFlag = 0;
+          viewBox.animate ({scrollLeft: scFlag * $(window).width()}, "slow");
+          //middle = false;
         } else {
           viewBox.animate ({scrollLeft: 0}, "slow");
-          middle = true;
+          //middle = true;
         }
       });
       
